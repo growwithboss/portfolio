@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOSS - growwithboss | Bingo Online Sales & Services</title>
+    <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -27,12 +29,13 @@
             --accent: #e8e8e8;
             --highlight: #e94560;
             --gold: #f39c12;
-            --light: #333333;
-            --white: #1a1a2e;
+            --light: #333333; /* Dark text in light mode */
+            --white: #1a1a2e; /* Dark primary in light mode */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Changed Font to Poppins */
+            font-family: 'Poppins', sans-serif;
             background: var(--primary);
             color: var(--light);
             overflow-x: hidden;
@@ -45,17 +48,18 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(10px);
+            /* Semi-transparent background with blur */
+            background: rgba(26, 26, 46, 0.85); 
+            backdrop-filter: blur(8px);
             padding: 1rem 5%;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(233, 69, 96, 0.1);
+            box-shadow: 0 2px 15px rgba(233, 69, 96, 0.15);
             transition: background 0.3s ease;
         }
 
         [data-theme="light"] nav {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         }
 
         .nav-container {
@@ -67,45 +71,39 @@
         }
 
         .nav-logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: var(--highlight);
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(243, 156, 18, 0.5); /* Subtle effect */
         }
 
         nav ul {
             list-style: none;
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         nav ul li a {
+            /* Changed color to var(--light) to respect theme */
             color: var(--light);
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s ease;
             position: relative;
+            letter-spacing: 1px;
+            /* Removed the underline element (::after) from original code */
         }
 
         nav ul li a:hover {
-            color: var(--highlight);
+            color: var(--gold); /* Subtle hover effect */
+            /* New: Subtle text shadow on hover */
+            text-shadow: 0 0 5px var(--highlight); 
         }
 
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gold);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
+        /* Removed the nav ul li a::after block */
 
         /* Theme Toggle Button */
         .theme-toggle {
@@ -118,11 +116,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
         .theme-toggle:hover {
             background: var(--gold);
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-2px); /* Added slight lift */
         }
 
         /* Mobile Menu */
@@ -130,17 +129,18 @@
             display: none;
             flex-direction: column;
             cursor: pointer;
-            gap: 5px;
+            gap: 6px; /* Increased gap */
         }
 
         .menu-toggle span {
-            width: 25px;
+            width: 30px; /* Increased size */
             height: 3px;
             background: var(--light);
             transition: all 0.3s ease;
             border-radius: 2px;
         }
-
+        
+        /* Sidebar styling remains mostly the same */
         .sidebar {
             position: fixed;
             top: 0;
@@ -151,30 +151,29 @@
             z-index: 2000;
             transition: right 0.3s ease;
             padding: 2rem;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
         }
 
         .sidebar.active {
             right: 0;
         }
-
-        .sidebar-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--light);
-        }
-
+        
         .sidebar ul {
             flex-direction: column;
             margin-top: 3rem;
             gap: 1.5rem;
+            padding-left: 0;
+        }
+        
+        .sidebar ul li a {
+            color: var(--light);
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: block;
         }
 
-        .sidebar ul li a {
-            font-size: 1.2rem;
+        .sidebar ul li a:hover {
+            color: var(--highlight);
         }
 
         .overlay {
@@ -191,6 +190,7 @@
         .overlay.active {
             display: block;
         }
+        
 
         /* Hero Section */
         .hero {
@@ -198,15 +198,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            /* Smoother, more defined gradient */
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 70%, var(--accent) 100%);
             position: relative;
             overflow: hidden;
+            border-bottom: 5px solid var(--highlight); /* Added border */
         }
 
         .hero-content {
             text-align: center;
-            z-index: 2;
+            z-index: 5; /* Increased Z-index to stand out over background icons */
             padding: 2rem;
+            backdrop-filter: blur(1px); /* Subtle blur to help text visibility */
         }
 
         .hero h1 {
@@ -219,6 +222,8 @@
             margin-bottom: 1rem;
             position: relative;
             display: inline-block;
+            letter-spacing: 5px;
+            text-shadow: 0 5px 15px rgba(233, 69, 96, 0.4); /* Added text shadow */
         }
 
         .hero h1 span {
@@ -226,90 +231,74 @@
             animation: bubble 2s ease-in-out infinite;
         }
 
+        /* Animation delays remain the same */
         .hero h1 span:nth-child(1) { animation-delay: 0s; }
         .hero h1 span:nth-child(2) { animation-delay: 0.2s; }
         .hero h1 span:nth-child(3) { animation-delay: 0.4s; }
         .hero h1 span:nth-child(4) { animation-delay: 0.6s; }
 
         @keyframes bubble {
-            0%, 100% { 
-                transform: translateY(0) scale(1);
-            }
-            50% { 
-                transform: translateY(-20px) scale(1.1);
-            }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); } /* Reduced scale for subtleness */
         }
 
         .tagline {
-            font-size: 1.8rem;
+            font-size: 2rem; /* Slightly larger */
             color: var(--gold);
             font-weight: 300;
-            letter-spacing: 2px;
+            letter-spacing: 3px; /* Increased letter-spacing */
             text-transform: lowercase;
             overflow: hidden;
             white-space: nowrap;
             opacity: 0;
             animation: typewriter 3s steps(14) 1s forwards, fadeIn 0.5s 1s forwards;
+            border-right: 3px solid var(--gold); /* Added blinking cursor effect */
         }
 
         @keyframes typewriter {
             from { width: 0; }
             to { width: 100%; }
         }
+        
+        /* Blinking Cursor animation added */
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        
+        .tagline-container {
+            display: inline-block;
+            margin: 0 auto;
+            /* Added blink animation to cursor effect */
+            animation: blink 0.75s step-end infinite; 
+        }
 
         @keyframes fadeIn {
             to { opacity: 1; }
         }
 
-        .tagline-container {
-            display: inline-block;
-            margin: 0 auto;
-        }
-
-        /* Floating shapes */
-        .shape {
+        /* Floating Vector Icons (New) */
+        .icon-shape {
             position: absolute;
-            opacity: 0.1;
+            font-size: 6rem; /* Large size */
+            color: var(--highlight);
+            opacity: 0.05; /* Low transparency */
+            z-index: 1;
+            transition: color 0.3s ease;
         }
 
-        .shape1 {
-            width: 300px;
-            height: 300px;
-            border: 3px solid var(--highlight);
-            border-radius: 50%;
-            top: 10%;
-            left: 10%;
-            animation: float 6s ease-in-out infinite;
+        [data-theme="light"] .icon-shape {
+            color: var(--gold);
         }
 
-        .shape2 {
-            width: 200px;
-            height: 200px;
-            border: 3px solid var(--gold);
-            top: 60%;
-            right: 15%;
-            animation: float 8s ease-in-out infinite;
-            animation-delay: 1s;
-        }
+        .icon-shape-1 { top: 15%; left: 5%; animation: float-rotate 10s ease-in-out infinite; }
+        .icon-shape-2 { top: 30%; right: 10%; animation: float-rotate 12s ease-in-out infinite 1s; }
+        .icon-shape-3 { bottom: 10%; left: 20%; animation: float-rotate 8s ease-in-out infinite 2s; }
+        .icon-shape-4 { bottom: 20%; right: 5%; animation: float-rotate 14s ease-in-out infinite 3s; }
+        .icon-shape-5 { top: 5%; right: 40%; animation: float-rotate 9s ease-in-out infinite 4s; }
 
-        .shape3 {
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(45deg, var(--highlight), var(--gold));
-            border-radius: 50%;
-            bottom: 10%;
-            left: 50%;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
+        @keyframes float-rotate {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(180deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.1; }
-            50% { transform: scale(1.2); opacity: 0.2; }
+            50% { transform: translateY(-25px) rotate(15deg); }
         }
 
         /* Services Section */
@@ -324,15 +313,17 @@
             color: var(--gold);
             margin-bottom: 3rem;
             position: relative;
+            font-weight: 700;
         }
 
         .section-title::after {
             content: '';
             display: block;
-            width: 100px;
+            width: 120px; /* Slightly wider */
             height: 4px;
             background: var(--highlight);
             margin: 1rem auto;
+            border-radius: 2px;
         }
 
         .services-grid {
@@ -345,15 +336,17 @@
 
         .service-card {
             background: var(--accent);
-            padding: 2rem;
+            padding: 2.5rem; /* Increased padding */
             border-radius: 15px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); /* Smoother transition */
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* Service card glare effect remains the same */
         .service-card::before {
             content: '';
             position: absolute;
@@ -361,7 +354,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.3), transparent);
             transition: left 0.5s ease;
         }
 
@@ -370,20 +363,29 @@
         }
 
         .service-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px); /* More lift */
             border-color: var(--highlight);
-            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4);
         }
 
         .service-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            /* Now styling the Font Awesome icon */
+            font-size: 3.5rem; 
+            margin-bottom: 1.5rem;
+            color: var(--light); /* Black/White vector icon by default */
+            transition: color 0.3s ease;
         }
+        
+        .service-card:hover .service-icon {
+            color: var(--gold); /* Gold on hover */
+        }
+
 
         .service-card h3 {
             color: var(--gold);
             margin-bottom: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.6rem; /* Slightly larger */
+            font-weight: 600;
         }
 
         .service-card p {
@@ -391,7 +393,7 @@
             font-size: 1rem;
         }
 
-        /* Projects Section */
+        /* Projects & Blog Section */
         .projects {
             padding: 6rem 5%;
             background: var(--primary);
@@ -415,17 +417,26 @@
 
         .project-card:hover {
             border-color: var(--gold);
-            transform: scale(1.05);
+            transform: scale(1.03) translateY(-5px); /* Adjusted scale and added lift */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .project-icon {
-            font-size: 3rem;
+            /* Styling for Project FA Icons */
+            font-size: 2.5rem;
             margin-bottom: 1rem;
+            color: var(--highlight);
+            transition: color 0.3s ease;
+        }
+
+        .project-card:hover .project-icon {
+            color: var(--light);
         }
 
         .project-card h3 {
             color: var(--highlight);
             margin-bottom: 1rem;
+            font-weight: 600;
         }
 
         /* Founders Section */
@@ -436,7 +447,7 @@
 
         .founders-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly wider card min-width */
             gap: 3rem;
             max-width: 1000px;
             margin: 0 auto;
@@ -444,38 +455,46 @@
 
         .founder-card {
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
             background: var(--accent);
             border-radius: 15px;
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .founder-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.3);
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4);
+            border: 2px solid var(--gold); /* Added border on hover */
         }
 
         .founder-avatar {
+            /* Removed the background gradient, now just a circle */
             width: 150px;
             height: 150px;
             margin: 0 auto 1.5rem;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--highlight), var(--gold));
+            background: var(--secondary); /* Contrast background for avatar area */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            border: 4px solid var(--secondary);
+            font-size: 3.5rem; /* Smaller icon size */
+            color: var(--highlight); /* Icon color */
+            border: 5px solid var(--highlight);
+            transition: border-color 0.3s ease, color 0.3s ease;
         }
+        
+        .founder-card:hover .founder-avatar {
+             border-color: var(--gold);
+             color: var(--gold);
+        }
+
 
         .founder-card h3 {
             color: var(--gold);
             margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        .founder-card p {
-            color: var(--light);
+            font-size: 1.6rem;
+            font-weight: 600;
         }
 
         /* Contact Section */
@@ -491,6 +510,7 @@
             padding: 3rem;
             border-radius: 15px;
             border: 2px solid var(--highlight);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .contact-form input,
@@ -503,13 +523,14 @@
             border-radius: 8px;
             color: var(--light);
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .contact-form input:focus,
         .contact-form textarea:focus {
             outline: none;
             border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5); /* Added glow on focus */
         }
 
         .contact-form button {
@@ -526,8 +547,8 @@
         }
 
         .contact-form button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.4);
+            transform: translateY(-5px); /* Increased lift on hover */
+            box-shadow: 0 15px 25px rgba(233, 69, 96, 0.5);
         }
 
         .contact-info {
@@ -536,19 +557,29 @@
         }
 
         .contact-info p {
-            margin: 0.5rem 0;
+            margin: 0.7rem 0; /* Increased margin */
             font-size: 1.1rem;
+        }
+        
+        .contact-info i {
+            margin-right: 0.5rem;
+            color: var(--highlight);
         }
 
         .contact-info a {
             color: var(--gold);
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-info a:hover {
+            color: var(--highlight);
         }
 
         /* Footer */
         footer {
             background: var(--secondary);
-            padding: 2.5rem 5% 1rem;
+            padding: 3rem 5% 1.5rem; /* Increased padding */
             border-top: 3px solid var(--highlight);
         }
 
@@ -558,13 +589,14 @@
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem; /* Increased margin */
         }
 
         .footer-section h3 {
             color: var(--gold);
-            margin-bottom: 0.8rem;
-            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .footer-section p,
@@ -572,7 +604,7 @@
             color: var(--light);
             text-decoration: none;
             display: block;
-            margin: 0.4rem 0;
+            margin: 0.5rem 0;
             transition: color 0.3s ease;
             font-size: 0.95rem;
         }
@@ -592,24 +624,26 @@
         .social-links {
             display: flex;
             gap: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
 
         .social-links a {
-            width: 35px;
-            height: 35px;
+            width: 38px;
+            height: 38px;
             background: var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.4rem; /* Larger icons */
+            color: var(--light);
             transition: all 0.3s ease;
         }
 
         .social-links a:hover {
             background: var(--highlight);
-            transform: translateY(-3px);
+            transform: translateY(-5px) rotate(10deg); /* More dynamic hover */
+            color: white;
         }
 
         /* WhatsApp Button */
@@ -617,32 +651,22 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             background: #25D366;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: white;
             text-decoration: none;
-            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6); /* Stronger shadow */
             z-index: 999;
             animation: bounce 2s infinite;
         }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        .whatsapp-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Privacy Policy Modal */
+        
+        /* Modal styling remains the same */
         .modal {
             display: none;
             position: fixed;
@@ -661,24 +685,37 @@
             padding: 3rem;
             border: 2px solid var(--highlight);
             border-radius: 15px;
-            width: 80%;
-            max-width: 800px;
+            width: 90%; /* Wider modal on desktop */
+            max-width: 900px;
             color: var(--light);
+            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.5);
         }
-
+        
+        .modal-content h2, .modal-content h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
         .close {
             color: var(--highlight);
             float: right;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
         }
 
-        .close:hover {
-            color: var(--gold);
-        }
 
         /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 6rem;
+            }
+            .tagline {
+                font-size: 1.5rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex;
@@ -687,29 +724,46 @@
             nav ul.desktop-menu {
                 display: none;
             }
+            
+            .nav-logo {
+                font-size: 1.6rem;
+            }
 
             .hero h1 {
                 font-size: 4rem;
+                letter-spacing: 2px;
             }
 
             .tagline {
                 font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+            
+            .icon-shape {
+                font-size: 4rem;
             }
 
             .section-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .footer-content {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 2rem;
+            }
+            
+            .whatsapp-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+                bottom: 20px;
+                right: 20px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <div class="nav-logo">BOSS</div>
@@ -730,7 +784,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar for Mobile -->
     <div class="overlay" onclick="toggleSidebar()"></div>
     <div class="sidebar">
         <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
@@ -745,92 +798,91 @@
         </ul>
     </div>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-        <div class="shape shape3"></div>
+        <i class="fa-solid fa-chart-line icon-shape icon-shape-1"></i>
+        <i class="fa-solid fa-rocket icon-shape icon-shape-2"></i>
+        <i class="fa-solid fa-file-excel icon-shape icon-shape-3"></i>
+        <i class="fa-solid fa-magnifying-glass-chart icon-shape icon-shape-4"></i>
+        <i class="fa-solid fa-globe icon-shape icon-shape-5"></i>
+        
         <div class="hero-content">
             <h1>
                 <span>B</span><span>O</span><span>S</span><span>S</span>
             </h1>
             <div class="tagline-container">
-                <p class="tagline">growwithboss</p>
+                <p class="tagline">grow with boss</p>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
     <section class="services" id="services">
         <h2 class="section-title">Our Services</h2>
         <div class="services-grid">
             <div class="service-card">
-                <div class="service-icon">📊</div>
+                <div class="service-icon"><i class="fa-solid fa-chart-line"></i></div>
                 <h3>Business Strategy</h3>
                 <p>Expert business strategy making to help you scale and grow your business effectively.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">🚀</div>
+                <div class="service-icon"><i class="fa-solid fa-rocket"></i></div>
                 <h3>Brand Onboarding</h3>
                 <p>Complete brand onboarding solutions to establish your digital presence with impact.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">📈</div>
+                <div class="service-icon"><i class="fa-solid fa-file-excel"></i></div>
                 <h3>Excel Automation</h3>
                 <p>Advanced Excel automation to streamline your data and boost productivity.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">💡</div>
+                <div class="service-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                 <h3>Digital Marketing</h3>
                 <p>Comprehensive digital media marketing strategies that deliver real results.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">🎯</div>
+                <div class="service-icon"><i class="fa-solid fa-bullhorn"></i></div>
                 <h3>Ads Management</h3>
                 <p>Professional ads management across all platforms for maximum ROI.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">🌐</div>
+                <div class="service-icon"><i class="fa-solid fa-globe"></i></div>
                 <h3>Web Building</h3>
                 <p>Modern, responsive web building services tailored to your business needs.</p>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section class="projects" id="projects">
         <h2 class="section-title">Sample Projects</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-icon">🏢</div>
+                <div class="project-icon"><i class="fa-solid fa-building"></i></div>
                 <h3>Corporate Strategy</h3>
                 <p>Strategic planning for enterprise-level business transformation.</p>
             </div>
             <div class="project-card">
-                <div class="project-icon">🛍️</div>
+                <div class="project-icon"><i class="fa-solid fa-store"></i></div>
                 <h3>E-commerce Launch</h3>
                 <p>Complete digital storefront with integrated marketing solutions.</p>
             </div>
             <div class="project-card">
-                <div class="project-icon">📱</div>
+                <div class="project-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
                 <h3>Social Media Campaign</h3>
                 <p>Multi-platform social media strategy driving engagement and conversions.</p>
             </div>
         </div>
     </section>
 
-    <!-- Founders Section -->
     <section class="founders" id="founders">
         <h2 class="section-title">Meet the Founders</h2>
         <div class="founders-grid">
             <div class="founder-card">
-                <div class="founder-avatar">👨‍💼</div>
+                <div class="founder-avatar"><i class="fa-solid fa-user-tie"></i></div>
                 <h3>Founder Name</h3>
                 <p>Co-Founder & CEO</p>
                 <p>Digital Strategy Expert</p>
             </div>
             <div class="founder-card">
-                <div class="founder-avatar">👩‍💼</div>
+                <div class="founder-avatar"><i class="fa-solid fa-user-gear"></i></div>
                 <h3>Founder Name</h3>
                 <p>Co-Founder & CTO</p>
                 <p>Technology Specialist</p>
@@ -838,7 +890,6 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="contact" id="contact">
         <h2 class="section-title">Get In Touch</h2>
         <div class="contact-container">
@@ -850,46 +901,44 @@
                 <button type="submit">Send Message</button>
             </form>
             <div class="contact-info">
-                <p>📧 <a href="mailto:growwithboss@gmail.com">growwithboss@gmail.com</a></p>
-                <p>📱 <a href="tel:+916060119007">+91 606011900</a></p>
+                <p><i class="fa-solid fa-envelope"></i> <a href="mailto:growwithboss@gmail.com">growwithboss@gmail.com</a></p>
+                <p><i class="fa-solid fa-phone"></i> <a href="tel:+916060119007">+91 606011900</a></p>
             </div>
         </div>
     </section>
 
-    <!-- Blog Section -->
     <section class="projects" id="blog">
         <h2 class="section-title">Latest from Our Blog</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-icon">✍️</div>
+                <div class="project-icon"><i class="fa-solid fa-pen-to-square"></i></div>
                 <h3>Coming Soon</h3>
                 <p>Stay tuned for insights, tips, and industry updates.</p>
             </div>
             <div class="project-card">
-                <div class="project-icon">📝</div>
+                <div class="project-icon"><i class="fa-solid fa-lightbulb"></i></div>
                 <h3>Business Tips</h3>
                 <p>Expert advice on growing your business in the digital age.</p>
             </div>
             <div class="project-card">
-                <div class="project-icon">🎓</div>
+                <div class="project-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                 <h3>Tutorials</h3>
                 <p>Step-by-step guides on digital marketing and automation.</p>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h3>BOSS</h3>
                 <p>Bingo Online Sales & Services</p>
-                <p style="color: var(--gold); font-weight: 600;">growwithboss</p>
+                <p style="color: var(--gold); font-weight: 600;">grow with boss</p>
                 <div class="social-links">
-                    <a href="www.facebook.com/growwithboss" title="Facebook">📘</a>
-                    <a href="www.x.com/growwithboss" title="Twitter">🐦</a>
-                    <a href="wwww.instagram.com/growwithboss" title="Instagram">📷</a>
-                    <a href="www.linkedin.com/growwithboss" title="LinkedIn">💼</a>
+                    <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
             </div>
             <div class="footer-section">
@@ -907,9 +956,9 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>📧 growwithboss@gmail.com</p>
-                <p>📱 +91 606011900</p>
-                <p>Bengaluru, India</p>
+                <p><i class="fa-solid fa-envelope"></i> growwithboss@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i> +91 606011900</p>
+                <p><i class="fa-solid fa-location-dot"></i> Mumbai, India</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -917,24 +966,22 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/91606011900" class="whatsapp-btn" target="_blank">
-        💬
+    <a href="https://wa.me/916060119007" class="whatsapp-btn" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- Privacy Policy Modal -->
     <div id="privacyModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 style="color: #f39c12; margin-bottom: 1.5rem;">Privacy Policy</h2>
+            <h2>Privacy Policy</h2>
             <p>Last updated: October 31, 2025</p>
-            <h3 style="color: #e94560; margin-top: 1.5rem;">Information We Collect</h3>
+            <h3 style="color: var(--highlight);">Information We Collect</h3>
             <p>We collect information that you provide directly to us through our contact forms and communication channels.</p>
-            <h3 style="color: #e94560; margin-top: 1.5rem;">How We Use Your Information</h3>
+            <h3 style="color: var(--highlight);">How We Use Your Information</h3>
             <p>We use the information we collect to provide, maintain, and improve our services, and to communicate with you about our offerings.</p>
-            <h3 style="color: #e94560; margin-top: 1.5rem;">Data Security</h3>
+            <h3 style="color: var(--highlight);">Data Security</h3>
             <p>We implement appropriate security measures to protect your personal information against unauthorized access or disclosure.</p>
-            <h3 style="color: #e94560; margin-top: 1.5rem;">Contact Us</h3>
+            <h3 style="color: var(--highlight);">Contact Us</h3>
             <p>If you have questions about this Privacy Policy, please contact us at growwithboss@gmail.com</p>
         </div>
     </div>
@@ -947,6 +994,10 @@
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close sidebar after clicking link on mobile
+                    if(window.innerWidth <= 768) {
+                        toggleSidebar();
+                    }
                 }
             });
         });
@@ -998,7 +1049,7 @@
             }
         }
 
-        // Scroll animations
+        // Scroll animations (Intersection Observer)
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1009,18 +1060,18 @@
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing once animated
                 }
             });
         }, observerOptions);
 
         document.querySelectorAll('.service-card, .project-card, .founder-card').forEach(el => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
+            el.style.transform = 'translateY(50px)'; /* Increased initial offset */
+            el.style.transition = 'all 0.8s ease-out'; /* Slower, smoother animation */
             observer.observe(el);
         });
     </script>
 
 </body>
 </html>
-
