@@ -21,12 +21,23 @@
             --white: #ffffff;
         }
 
+        [data-theme="light"] {
+            --primary: #f5f5f5;
+            --secondary: #ffffff;
+            --accent: #e8e8e8;
+            --highlight: #e94560;
+            --gold: #f39c12;
+            --light: #333333;
+            --white: #1a1a2e;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--primary);
             color: var(--light);
             overflow-x: hidden;
             line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* Navigation */
@@ -39,15 +50,33 @@
             padding: 1rem 5%;
             z-index: 1000;
             box-shadow: 0 2px 20px rgba(233, 69, 96, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--highlight);
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: center;
             align-items: center;
             gap: 2rem;
-            flex-wrap: wrap;
         }
 
         nav ul li a {
@@ -78,6 +107,91 @@
             width: 100%;
         }
 
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--highlight);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--gold);
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--light);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--secondary);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: 2rem;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--light);
+        }
+
+        .sidebar ul {
+            flex-direction: column;
+            margin-top: 3rem;
+            gap: 1.5rem;
+        }
+
+        .sidebar ul li a {
+            font-size: 1.2rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
         /* Hero Section */
         .hero {
             height: 100vh;
@@ -102,36 +216,54 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: glow 2s ease-in-out infinite alternate;
             margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
         }
 
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        .hero h1 span {
+            display: inline-block;
+            animation: bubble 2s ease-in-out infinite;
+        }
+
+        .hero h1 span:nth-child(1) { animation-delay: 0s; }
+        .hero h1 span:nth-child(2) { animation-delay: 0.2s; }
+        .hero h1 span:nth-child(3) { animation-delay: 0.4s; }
+        .hero h1 span:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes bubble {
+            0%, 100% { 
+                transform: translateY(0) scale(1);
             }
-            to {
-                text-shadow: 0 0 40px rgba(243, 156, 18, 0.8);
+            50% { 
+                transform: translateY(-20px) scale(1.1);
             }
         }
 
         .tagline {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--gold);
             font-weight: 300;
-            letter-spacing: 3px;
-            animation: fadeInUp 1s ease-out 0.5s both;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            overflow: hidden;
+            white-space: nowrap;
+            opacity: 0;
+            animation: typewriter 3s steps(14) 1s forwards, fadeIn 0.5s 1s forwards;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .tagline-container {
+            display: inline-block;
+            margin: 0 auto;
         }
 
         /* Floating shapes */
@@ -384,7 +516,7 @@
             width: 100%;
             padding: 1rem;
             background: linear-gradient(45deg, var(--highlight), var(--gold));
-            color: var(--white);
+            color: white;
             border: none;
             border-radius: 8px;
             font-size: 1.1rem;
@@ -416,7 +548,7 @@
         /* Footer */
         footer {
             background: var(--secondary);
-            padding: 3rem 5%;
+            padding: 2.5rem 5% 1rem;
             border-top: 3px solid var(--highlight);
         }
 
@@ -424,14 +556,15 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .footer-section h3 {
             color: var(--gold);
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
         }
 
         .footer-section p,
@@ -439,8 +572,9 @@
             color: var(--light);
             text-decoration: none;
             display: block;
-            margin: 0.5rem 0;
+            margin: 0.4rem 0;
             transition: color 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .footer-section a:hover {
@@ -449,9 +583,33 @@
 
         .footer-bottom {
             text-align: center;
-            padding-top: 2rem;
+            padding-top: 1.5rem;
             border-top: 1px solid var(--accent);
             color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--highlight);
+            transform: translateY(-3px);
         }
 
         /* WhatsApp Button */
@@ -482,25 +640,6 @@
 
         .whatsapp-btn:hover {
             transform: scale(1.1);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 4rem;
-            }
-
-            .tagline {
-                font-size: 1.2rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-            }
         }
 
         /* Privacy Policy Modal */
@@ -538,21 +677,73 @@
         .close:hover {
             color: var(--gold);
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav ul.desktop-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 4rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Navigation -->
     <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#founders">Founders</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#blog">Blog</a></li>
-        </ul>
+        <div class="nav-container">
+            <div class="nav-logo">BOSS</div>
+            <ul class="desktop-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#founders">Founders</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button></li>
+            </ul>
+            <div class="menu-toggle" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
     </nav>
+
+    <!-- Sidebar for Mobile -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+        <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
+        <ul>
+            <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
+            <li><a href="#services" onclick="toggleSidebar()">Services</a></li>
+            <li><a href="#projects" onclick="toggleSidebar()">Projects</a></li>
+            <li><a href="#founders" onclick="toggleSidebar()">Founders</a></li>
+            <li><a href="#contact" onclick="toggleSidebar()">Contact</a></li>
+            <li><a href="#blog" onclick="toggleSidebar()">Blog</a></li>
+            <li><button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button></li>
+        </ul>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -560,8 +751,12 @@
         <div class="shape shape2"></div>
         <div class="shape shape3"></div>
         <div class="hero-content">
-            <h1>BOSS</h1>
-            <p class="tagline">Grow with Boss</p>
+            <h1>
+                <span>B</span><span>O</span><span>S</span><span>S</span>
+            </h1>
+            <div class="tagline-container">
+                <p class="tagline">grow with boss</p>
+            </div>
         </div>
     </section>
 
@@ -689,24 +884,32 @@
             <div class="footer-section">
                 <h3>BOSS</h3>
                 <p>Bingo Online Sales & Services</p>
-                <p>Grow with Boss</p>
+                <p style="color: var(--gold); font-weight: 600;">grow with boss</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook">📘</a>
+                    <a href="#" title="Twitter">🐦</a>
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="LinkedIn">💼</a>
+                </div>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <a href="#services">Services</a>
                 <a href="#projects">Projects</a>
-                <a href="#contact">Contact</a>
+                <a href="#founders">Founders</a>
                 <a href="#blog">Blog</a>
             </div>
             <div class="footer-section">
                 <h3>Legal</h3>
                 <a href="#" onclick="openModal()">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
             </div>
             <div class="footer-section">
-                <h3>Connect</h3>
+                <h3>Contact</h3>
                 <p>📧 growwithboss@gmail.com</p>
                 <p>📱 +91 606011900</p>
+                <p>📍 Mumbai, India</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -746,6 +949,29 @@
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
+        });
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
         });
 
         // Form submission
