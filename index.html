@@ -932,7 +932,7 @@
             </form>
             <div class="contact-info">
                 <a href="mailto:growwithboss@gmail.com">→ growwithboss@gmail.com</a>
-                <a href="tel:+919606011900">→ +91 9606011900</a>
+                <a href="tel:+916060119007">→ +91 606011900</a>
             </div>
         </div>
     </section>
@@ -979,7 +979,7 @@
             <div class="footer-section">
                 <h3>Contact</h3>
                 <a href="mailto:growwithboss@gmail.com">Email</a>
-                <a href="tel:+919606011900">Phone</a>
+                <a href="tel:+916060119007">Phone</a>
                 <a href="#">Location</a>
             </div>
         </div>
@@ -1079,10 +1079,63 @@
         });
 
         // Form Submission
-        function handleSubmit(e) {
+        async function handleSubmit(e) {
             e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
-            e.target.reset();
+            
+            const form = e.target;
+            const submitButton = form.querySelector('button');
+            const originalText = submitButton.textContent;
+            
+            // Get form values
+            const formData = {
+                name: form.querySelector('input[placeholder="Name"]').value,
+                email: form.querySelector('input[placeholder="Email"]').value,
+                subject: form.querySelector('input[placeholder="Subject"]').value,
+                message: form.querySelector('textarea').value
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                alert('❌ Please fill in all fields');
+                return false;
+            }
+            
+            // Disable button and show loading
+            submitButton.textContent = 'SENDING...';
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.7';
+            submitButton.style.cursor = 'wait';
+            
+            try {
+                // Replace with your Google Apps Script URL
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1-JWjkShPtJ20o5Re78FA7eEvY1TkoSBwc3Aa86S4lR5T0OgJIXNj_7PHYzhhGKa7dg/exec';
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Show success message
+                alert('✅ Thank you for contacting us!\n\nYour message has been sent successfully.\nWe will get back to you within 24-48 hours at ' + formData.email);
+                
+                // Reset form
+                form.reset();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Oops! Something went wrong.\n\nPlease try again or contact us directly at:\ngrowwithboss@gmail.com\n+91 606011900');
+            } finally {
+                // Re-enable button
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+                submitButton.style.opacity = '1';
+                submitButton.style.cursor = 'none';
+            }
+            
             return false;
         }
 
