@@ -48,9 +48,8 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: all 0.15s ease;
+            transition: all 0.15s ease, border-color 0.3s ease;
             transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
         }
 
         .cursor-follower {
@@ -61,9 +60,8 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5);
+            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5), background 0.3s ease;
             transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
         }
 
         a:hover ~ .cursor,
@@ -80,7 +78,8 @@
             width: 100%;
             z-index: 1000;
             padding: 2rem 5%;
-            mix-blend-mode: difference;
+            background: var(--bg-primary);
+            transition: background 0.3s ease;
         }
 
         .nav-container {
@@ -98,6 +97,7 @@
             color: var(--text-primary);
             position: relative;
             overflow: hidden;
+            transition: color 0.3s ease;
         }
 
         .nav-logo::after {
@@ -351,6 +351,11 @@
             background-size: 50px 50px;
             opacity: 0.03;
             animation: gridMove 20s linear infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .grid-bg {
+            opacity: 0.05;
         }
 
         @keyframes gridMove {
@@ -366,6 +371,11 @@
             background: var(--text-primary);
             opacity: 0.3;
             animation: float 15s infinite;
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="light"] .particle {
+            opacity: 0.4;
         }
 
         @keyframes float {
