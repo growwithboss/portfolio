@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
     <!--APk manifest link -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/portfolio/manifest.json">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5BE2685PP"></script>
     
@@ -1317,10 +1317,12 @@
         });
 
 
-        // PWA Service Worker Registration
+        // Locate this part of your script (near the bottom)
+// PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        // CHANGE THIS LINE: Add '/portfolio/'
+        navigator.serviceWorker.register('/portfolio/sw.js') 
             .then(registration => {
                 console.log('SW registered:', registration.scope);
             })
@@ -1333,4 +1335,5 @@ if ('serviceWorker' in navigator) {
 
 </body>
 </html>
+
 
