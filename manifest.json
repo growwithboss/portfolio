@@ -2,9 +2,7 @@
     "name": "BOSS - Grow with Boss",
     "short_name": "BOSS App",
     "description": "Bingo Online Sales & Services for Business Growth.",
-    // FIX 1: The start URL must include the repo name
     "start_url": "/portfolio/",
-    // FIX 2: The scope must include the repo name
     "scope": "/portfolio/", 
     "display": "standalone",
     "orientation": "portrait",
