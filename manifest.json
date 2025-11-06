@@ -9,7 +9,6 @@
     "background_color": "#000000",
     "theme_color": "#000000",
     "icons": [
-        // These icon paths are correct assuming the files are in /portfolio/images/
         {
             "src": "images/icon-192x192.png",
             "sizes": "192x192",
