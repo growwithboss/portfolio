@@ -2,12 +2,16 @@
     "name": "BOSS - Grow with Boss",
     "short_name": "BOSS App",
     "description": "Bingo Online Sales & Services for Business Growth.",
-    "start_url": "https://growwithboss.github.io/portfolio/",
+    // FIX 1: The start URL must include the repo name
+    "start_url": "/portfolio/",
+    // FIX 2: The scope must include the repo name
+    "scope": "/portfolio/", 
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#000000",
     "theme_color": "#000000",
     "icons": [
+        // These icon paths are correct assuming the files are in /portfolio/images/
         {
             "src": "images/icon-192x192.png",
             "sizes": "192x192",
