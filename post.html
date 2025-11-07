@@ -296,7 +296,7 @@ const cursorFollower = document.querySelector('.cursor-follower');
         }
 
         // Execute the post loading logic when the page loads
-        window.addEventListener('load', loadSinglePost);
+        document.addEventListener('DOMContentLoaded', loadSinglePost);
         
         // Call the initial observer now for the main content elements
         document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
