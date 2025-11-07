@@ -8,8 +8,7 @@
     <link rel="manifest" href="/portfolio/manifest.json">
     
     <style>
-        /* Paste the ENTIRE <style> block from your index.html here */
-        /* START OF INDEX.HTML <style> BLOCK COPY */
+        /* START OF INCLUDED CSS */
         * {
             margin: 0;
             padding: 0;
@@ -56,13 +55,68 @@
             transition: all 0.15s ease, border-color 0.3s ease;
             transform: translate(-50%, -50%);
         }
-        /* ... [PASTE REST OF INDEX.HTML CSS HERE, INCLUDING ALL ANIMATIONS/SECTIONS] ... */
-        /* Note: I cannot paste your full original CSS here, but you must ensure it is present to render correctly. */
+
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5), background 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        a:hover ~ .cursor,
+        button:hover ~ .cursor {
+            width: 40px;
+            height: 40px;
+            border-width: 1px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 2rem 5%;
+            background: var(--bg-primary);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: var(--text-primary);
+            position: relative;
+        }
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--text-primary);
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            cursor: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .theme-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
         
-        /* END OF INDEX.HTML <style> BLOCK COPY */
-
-
-        /* Specific styles for the blog content (from your input) */
+        /* Blog Post Specific Layout */
         .post-container {
             max-width: 900px;
             margin: 6rem auto 4rem;
@@ -80,16 +134,39 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 1rem;
         }
-        /* Style for content fetched from Google Docs to keep it readable */
+        /* Styles for content fetched from Google Docs */
         .post-content p {
             margin-bottom: 1.5rem;
             line-height: 1.8;
+            color: var(--text-secondary);
         }
         .post-content h2, .post-content h3 {
             margin-top: 2rem;
             margin-bottom: 1rem;
             font-weight: 700;
+            color: var(--text-primary);
         }
+         /* Scroll Reveal (Essential for consistency) */
+        [data-scroll] {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-scroll].revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+             .post-content h1 {
+                font-size: 2rem;
+            }
+             .post-container {
+                margin-top: 4rem;
+            }
+        }
+        /* END OF INCLUDED CSS */
     </style>
 </head>
 <body>
@@ -107,20 +184,21 @@
     </nav>
     
     <main class="post-container">
-        <div id="loading-message">
-            <h1 style="text-align: center; margin-top: 5rem;">Loading Blog Post...</h1>
+        <div id="status-message">
+            <h1 style="text-align: center; margin-top: 5rem; color: var(--text-primary);" id="loading-text">Loading Blog Post...</h1>
         </div>
+        
         <div class="post-content" id="blog-post-content" style="display: none;">
-        </div>
+            </div>
     </main>
 
     <script>
-        // Copy the theme URL from your deployment (the one you gave me)
+        // The URL of your deployed Apps Script API. This MUST be correct.
         const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmogvzsGclRMymiPegD-7gtZFWSQxTWkg3JeE5lEIAAFp4G19HmdswQ/exec';
 
-        // --- Core Functions Copied from index.html ---
+        // --- Core Utility Functions ---
 
-        // Theme Toggle (Copied for functionality on this page)
+        // Theme Toggle
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -129,13 +207,13 @@
             localStorage.setItem('theme', newTheme);
         }
         
-        // Load Saved Theme (for consistency)
+        // Load Saved Theme
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
         });
 
-        // Custom Cursor Logic (Copied for consistency)
+        // Custom Cursor Logic
         const cursor = document.querySelector('.cursor');
         const cursorFollower = document.querySelector('.cursor-follower');
 
@@ -149,7 +227,7 @@
             }, 100);
         });
         
-        // Scroll Reveal Logic (Needed for the post content to appear smoothly)
+        // Scroll Reveal Logic 
         const observerOptions = {
             threshold: 0.15,
             rootMargin: '0px 0px -100px 0px'
@@ -163,27 +241,30 @@
             });
         }, observerOptions);
 
+
         // --- Single Post Fetching Logic ---
 
         async function loadSinglePost() {
             const urlParams = new URLSearchParams(window.location.search);
             const slug = urlParams.get('slug');
 
-            const loadingMessage = document.getElementById('loading-message');
+            const statusMessage = document.getElementById('status-message');
             const postContentDiv = document.getElementById('blog-post-content');
 
             if (!slug) {
-                loadingMessage.innerHTML = '<h1 style="color: red;">Error: No blog post slug provided.</h1>';
+                statusMessage.innerHTML = '<h1 style="color: red;">Error: No blog post slug provided.</h1>';
                 return;
             }
 
             try {
-                // Fetch the specific post content using the slug
+                // Fetch the specific post content using the slug parameter
                 const response = await fetch(`${BLOG_API_URL}?slug=${slug}`);
                 const data = await response.json();
                 
-                if (data.error || !data.htmlContent) {
-                    loadingMessage.innerHTML = `<h1 style="color: red;">Post Error: ${data.error || 'Content not found. Check Google Doc ID/Sharing.'}</h1>`;
+                if (data.error || !data.htmlContent || data.htmlContent.includes("Error: ")) {
+                    // Handle errors passed back by the Apps Script 
+                    const errorMessage = data.error || data.htmlContent || 'Content not found.';
+                    statusMessage.innerHTML = `<h1 style="color: red;">Post Error: ${errorMessage}</h1>`;
                     return;
                 }
 
@@ -198,18 +279,16 @@
                 `;
 
                 // Hide loading, show post content
-                loadingMessage.style.display = 'none';
+                statusMessage.style.display = 'none';
                 postContentDiv.style.display = 'block';
                 postContentDiv.innerHTML = finalHTML;
                 
                 // Re-run scroll observer for new elements
-                document.querySelectorAll('[data-scroll]').forEach(el => {
-                    if (el.innerHTML) observer.observe(el);
-                });
+                postContentDiv.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
 
             } catch (error) {
                 console.error('Failed to load single post:', error);
-                loadingMessage.innerHTML = `<h1 style="color: red;">A critical error occurred while fetching the document.</h1>`;
+                statusMessage.innerHTML = `<h1 style="color: red;">A critical error occurred while communicating with the API.</h1>`;
             }
         }
 
