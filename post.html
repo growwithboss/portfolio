@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post | BOSS</title>
+    
+    <style>
+        /* Paste your ENTIRE <style> block content from index.html here */
+        /* Make sure all CSS variables and dark/light modes carry over */
+    </style>
+
+    <style>
+        /* Specific styles for the blog content */
+        .post-container {
+            max-width: 900px;
+            margin: 6rem auto 4rem;
+            padding: 2rem 5%;
+        }
+        .post-content h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .post-content .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+        /* Style for content fetched from Google Docs to keep it readable */
+        .post-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        .post-content h2, .post-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">BOSS</div>
+            <a href="index.html" class="theme-btn">Back to Home</a>
+        </div>
+    </nav>
+    
+    <main class="post-container">
+        <div id="loading-message">
+            <h1 style="text-align: center; margin-top: 5rem;">Loading Blog Post...</h1>
+        </div>
+        <div class="post-content" id="blog-post-content" style="display: none;">
+            </div>
+    </main>
+
+    <script>
+        // Place JavaScript for fetching and displaying the post here later
+        
+        // --- Keep your original JS for cursor/theme/modal variables here ---
+        // You MUST copy and paste the theme toggle and cursor logic from index.html
+    </script>
+</body>
+</html>
