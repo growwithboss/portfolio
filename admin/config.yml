@@ -2,7 +2,6 @@ backend:
   name: github
   repo: growwithboss/portfolio
   branch: main
-  base_url: https://auth.netlify.com
   auth_scope: repo
   auth_provider: github
 
