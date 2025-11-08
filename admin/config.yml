@@ -5,6 +5,9 @@ backend:
   auth_scope: repo
   auth_provider: github
 
+local_backend: true # 🚨 ADD THIS LINE (Essential for testing and local authentication)
+display_url: https://growwithboss.netlify.app # 🚨 ADD THIS LINE (Tells the CMS its base URL)
+
 publish_mode: editorial_workflow
 
 media_folder: "images/blog" 
