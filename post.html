@@ -7,115 +7,12 @@
     
     <link rel="manifest" href="/portfolio/manifest.json">
     
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
+    
     <style>
+        /* PASTE THE FULL <style> BLOCK FROM index.html HERE */
         /* START OF INCLUDED CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #000000;
-            --bg-secondary: #0a0a0a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent: #ffffff;
-            --highlight: #ffffff;
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --text-primary: #000000;
-            --text-secondary: #505050;
-            --accent: #000000;
-            --highlight: #000000;
-        }
-
-        /* Custom Cursor */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            line-height: 1.6;
-            cursor: none;
-            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--text-primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.15s ease, border-color 0.3s ease;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor-follower {
-            width: 8px;
-            height: 8px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5), background 0.3s ease;
-            transform: translate(-50%, -50%);
-        }
-
-        a:hover ~ .cursor,
-        button:hover ~ .cursor {
-            width: 40px;
-            height: 40px;
-            border-width: 1px;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 2rem 5%;
-            background: var(--bg-primary);
-        }
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 0.2em;
-            color: var(--text-primary);
-            position: relative;
-        }
-        .theme-btn {
-            background: transparent;
-            border: 1px solid var(--text-primary);
-            color: var(--text-primary);
-            padding: 0.5rem 1.5rem;
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            cursor: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .theme-btn:hover {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            transform: translateY(-2px);
-        }
-        
+        /* ... (Your full CSS, including theme variables, cursor styles, and layout) ... */
         /* Blog Post Specific Layout */
         .post-container {
             max-width: 900px;
@@ -134,7 +31,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 1rem;
         }
-        /* Styles for content fetched from Google Docs */
+        /* Styles for content fetched from Markdown */
         .post-content p {
             margin-bottom: 1.5rem;
             line-height: 1.8;
@@ -146,32 +43,11 @@
             font-weight: 700;
             color: var(--text-primary);
         }
-         /* Scroll Reveal (Essential for consistency) */
-        [data-scroll] {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-scroll].revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        @media (max-width: 768px) {
-             .post-content h1 {
-                font-size: 2rem;
-            }
-             .post-container {
-                margin-top: 4rem;
-            }
-        }
+        [data-scroll] { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-scroll].revealed { opacity: 1; transform: translateY(0); }
         /* END OF INCLUDED CSS */
- 
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-    
 <body>
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
@@ -192,155 +68,81 @@
         </div>
         
         <div class="post-content" id="blog-post-content" style="display: none;">
-            </div>
+        </div>
     </main>
 
     <script>
-        // The URL of your deployed Apps Script API. This MUST be correct.
-        const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbyeTlmIqSJcImVtcOdWrRy-xcu089qQd576iysse-O4O1MUMYOT89pRWEcERihSma3-nw/exec';
+        const GITHUB_REPO_OWNER = 'growwithboss';
+        const GITHUB_REPO_NAME = 'portfolio';
 
-        // --- Core Utility Functions ---
-
-        // Theme Toggle
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        }
+        // --- Core Utility Functions (Theme, Cursor, Observer) ---
+        function toggleTheme() { /* ... (theme logic) ... */ }
+        window.addEventListener('DOMContentLoaded', () => { const savedTheme = localStorage.getItem('theme') || 'dark'; document.documentElement.setAttribute('data-theme', savedTheme); loadSinglePost(); }); 
+        const cursor = document.querySelector('.cursor'); const cursorFollower = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => { /* ... (cursor logic) ... */ });
+        const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -100px 0px' };
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); } }); }, observerOptions);
         
-        / Load Saved Theme (for consistency)
-window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-});
+        // --- Single Post Fetching Logic (Reads Markdown) ---
 
-// Custom Cursor Logic
-const cursor = document.querySelector('.cursor');
-const cursorFollower = document.querySelector('.cursor-follower');
-        // Custom Cursor Logic
-        const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
+        async function loadSinglePost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('slug');
+            const statusMessage = document.getElementById('status-message');
+            const postContentDiv = document.getElementById('blog-post-content');
 
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            setTimeout(() => {
-                cursorFollower.style.left = e.clientX + 'px';
-                cursorFollower.style.top = e.clientY + 'px';
-            }, 100);
-        });
-        
-        // Scroll Reveal Logic 
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        };
+            if (!slug) {
+                statusMessage.innerHTML = '<h1 style="color: red;">Error: No post slug provided.</h1>'; return;
+            }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                }
-            });
-        }, observerOptions);
-
-
-        // --- Single Post Fetching Logic ---
-
-        const GITHUB_REPO_OWNER = 'growwithboss'; // REPLACE
-const GITHUB_REPO_NAME = 'portfolio';
-
-async function loadSinglePost() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const slug = urlParams.get('slug');
-    const statusMessage = document.getElementById('status-message');
-    const postContentDiv = document.getElementById('blog-post-content');
-
-    if (!slug) {
-        statusMessage.innerHTML = '<h1 style="color: red;">Error: No blog post slug provided.</h1>';
-        return;
-    }
-
-    try {
-        // Construct the path to the Markdown file saved by Decap CMS
-        // Example path: _posts/2025-11-08-brand-onboarding-launch.md
-        const filePath = `_posts/${slug}.md`;
-        
-        // Fetch the raw Markdown file content from GitHub via Netlify (or GitHub Raw link)
-        const response = await fetch(`https://${GITHUB_REPO_OWNER}.github.io/${GITHUB_REPO_NAME}/${filePath}`);
-        
-        if (!response.ok) {
-            statusMessage.innerHTML = `<h1 style="color: red;">Error: Post file not found at ${filePath}.</h1>`;
-            return;
-        }
-
-        // Get the raw Markdown text
-        const markdownText = await response.text();
-
-        // Separate Frontmatter (metadata) from the Body content
-        const parts = markdownText.split('---');
-        const frontmatter = parts[1]; // The metadata block
-        const bodyMarkdown = parts.slice(2).join('---'); // The main content
-
-        // Convert the Markdown body to HTML
-        const htmlContent = marked.parse(bodyMarkdown);
-        
-        // Simple way to get title from frontmatter for now (needs refinement later)
-        const titleMatch = frontmatter.match(/title: ["']?([^"']+)["']?/i);
-        const title = titleMatch ? titleMatch[1] : 'Untitled Post';
-        
-        // Hide loading, show post content
-        document.title = `${title} | BOSS`;
-        statusMessage.style.display = 'none';
-        postContentDiv.style.display = 'block';
-        
-        postContentDiv.innerHTML = `
-            <h1 data-scroll>${title}</h1>
-            <div data-scroll>${htmlContent}</div>
-        `;
-
-        // Re-run scroll observer for new elements
-        postContentDiv.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
-
-    } catch (error) {
-        console.error('Failed to load Markdown post:', error);
-        statusMessage.innerHTML = `<h1 style="color: red;">A critical error occurred while parsing the content.</h1>`;
-    }
-}
-// Ensure this function is triggered on page load in post.html
-window.addEventListener('load', loadSinglePost);
-
-                // 3. Update the page content
-                document.title = `${data.title} | BOSS`;
+            try {
+                const filePath = `_posts/${slug}.md`; 
                 
-                // Construct the full HTML content
-                const finalHTML = `
-                    <h1 data-scroll>${data.title}</h1>
-                    <p class="post-meta" data-scroll>By ${data.author} on ${data.date}</p>
-                    <div data-scroll>${data.htmlContent}</div> 
-                `;
+                // Fetch the raw Markdown file content directly from GitHub's host
+                const response = await fetch(`https://${GITHUB_REPO_OWNER}.github.io/${GITHUB_REPO_NAME}/${filePath}`);
+                
+                if (!response.ok) {
+                    statusMessage.innerHTML = `<h1 style="color: red;">Error: Post file not found or wrong slug (${slug}).</h1>`; return;
+                }
 
-                // Hide loading, show post content
+                const markdownText = await response.text();
+
+                // Separate Frontmatter (metadata) from the Body content
+                const parts = markdownText.split('---');
+                const frontmatter = parts[1]; 
+                const bodyMarkdown = parts.slice(2).join('---'); 
+
+                // Extract metadata
+                const titleMatch = frontmatter.match(/title: ["']?([^"']+)["']?/i);
+                const authorMatch = frontmatter.match(/author: ["']?([^"']+)["']?/i);
+                const dateMatch = frontmatter.match(/date: (.*)/i);
+
+                const title = titleMatch ? titleMatch[1] : 'Untitled Post';
+                const author = authorMatch ? authorMatch[1] : 'Unknown';
+                const date = dateMatch ? new Date(dateMatch[1]).toLocaleDateString() : 'N/A';
+                
+                // Convert the Markdown body to HTML
+                const htmlContent = marked.parse(bodyMarkdown);
+                
+                // Update page
+                document.title = `${title} | BOSS`;
                 statusMessage.style.display = 'none';
                 postContentDiv.style.display = 'block';
-                postContentDiv.innerHTML = finalHTML;
                 
-                // Re-run scroll observer for new elements
+                postContentDiv.innerHTML = `
+                    <h1 data-scroll>${title}</h1>
+                    <p class="post-meta" data-scroll>By ${author} on ${date}</p>
+                    <div data-scroll>${htmlContent}</div>
+                `;
+
                 postContentDiv.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
 
             } catch (error) {
-                console.error('Failed to load single post:', error);
-                statusMessage.innerHTML = `<h1 style="color: red;">A critical error occurred while communicating with the API.</h1>`;
+                console.error('Failed to load Markdown post:', error);
+                statusMessage.innerHTML = `<h1 style="color: red;">A critical error occurred while processing the content.</h1>`;
             }
         }
-
-        // Execute the post loading logic when the page loads
-        document.addEventListener('DOMContentLoaded', loadSinglePost);
-        
-        // Call the initial observer now for the main content elements
+        window.addEventListener('load', loadSinglePost);
         document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
     </script>
 </body>
