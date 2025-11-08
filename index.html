@@ -6,9 +6,7 @@
     <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
     
     <link rel="manifest" href="/portfolio/manifest.json">
-/*Ensure this is updated in your index.html*/
-    <script> block
-const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmogvzsGclRMymiPegD-7gtZFWSQxTWkg3JeE5lEIAAFp4G19HmdswQ/exec';
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5BE2685PP"></script>
@@ -30,8 +28,8 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
     <style>
         /* START OF ENTIRE ORIGINAL CSS BLOCK */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { /* ... theme variables ... */ }
-        [data-theme="light"] { /* ... light theme variables ... */ }
+        :root { --bg-primary: #000000; --bg-secondary: #0a0a0a; --text-primary: #ffffff; --text-secondary: #a0a0a0; --accent: #ffffff; --highlight: #ffffff; }
+        [data-theme="light"] { --bg-primary: #ffffff; --bg-secondary: #f5f5f5; --text-primary: #000000; --text-secondary: #505050; --accent: #000000; --highlight: #000000; }
         /* Custom Cursor */
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; line-height: 1.6; cursor: none; transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .cursor { width: 20px; height: 20px; border: 2px solid var(--text-primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: all 0.15s ease, border-color 0.3s ease; transform: translate(-50%, -50%); }
@@ -69,7 +67,7 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
         .sidebar ul li:nth-child(4) a { animation-delay: 0.4s; }
         .sidebar ul li:nth-child(5) a { animation-delay: 0.5s; }
         .sidebar ul li:nth-child(6) a { animation-delay: 0.6s; }
-        .sidebar ul li:nth-child(7) a { animation-delay: 0.7s; } /* New link */
+        .sidebar ul li:nth-child(7) a { animation-delay: 0.7s; } 
         @keyframes slideUp { to { transform: translateY(0); } }
         .sidebar ul li a:hover { transform: translateX(20px); }
         /* Hero Section */
@@ -311,17 +309,17 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
         const declineModalBtn = document.getElementById('pwa-modal-decline-btn');
         const installSidebarLink = document.getElementById('pwa-install-sidebar-link');
         
-        // --- Blog Listing Logic (Fetch Markdown filenames from GitHub) ---
+        // --- Blog Listing Logic (Fetch Markdown filenames from GitHub API) ---
         async function loadBlogListing() {
             const container = document.getElementById('blog-posts-container');
             if (!container) return; 
 
-            // 1. Fetch the list of file names from the _posts folder in your repo
+            // Use GitHub API to get file list from the _posts folder
             const apiEndpoint = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/_posts`;
             
             try {
                 const response = await fetch(apiEndpoint);
-                if (!response.ok) throw new Error('Could not connect to GitHub API.');
+                if (!response.ok) throw new Error('Could not connect to GitHub API. Status: ' + response.status);
 
                 const files = await response.json();
                 
@@ -335,17 +333,19 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
                     return;
                 }
                 
-                // 2. Map file names to display cards
+                // Map file names to display cards
                 container.innerHTML = posts.map(file => {
-                    // Extract date and slug from filename (e.g., 2025-11-08-post-title.md)
+                    // Filename format assumed: YYYY-MM-DD-post-title.md
                     const parts = file.name.split('-');
                     const year = parts[0];
                     const month = parts[1];
                     const day = parts[2];
-                    const slugPart = parts.slice(3).join('-'); // Includes .md
-                    
                     const slug = file.name.replace('.md', ''); // The full filename is the slug needed for post.html
-                    const title = slugPart.replace('.md', '').replace(/-/g, ' ').toUpperCase(); // Simple title format
+                    
+                    // Simple Title Formatting for the List: removes YYYY-MM-DD- and hyphens
+                    const rawTitlePart = parts.slice(3).join('-');
+                    const title = rawTitlePart.replace('.md', '').replace(/-/g, ' ').toUpperCase(); 
+                    
                     const date = `${new Date(year, month - 1, day).toLocaleDateString()}`;
 
                     return `
@@ -360,7 +360,7 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
 
             } catch (error) {
                 console.error('Failed to fetch blog posts from GitHub:', error);
-                container.innerHTML = `<p style="color: red;">Error: Failed to load blog list. Check GitHub API connection.</p>`;
+                container.innerHTML = `<p style="color: red;">Error: Failed to load blog list. Check GitHub API status.</p>`;
             }
         }
         
@@ -429,5 +429,3 @@ const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmog
 
 </body>
 </html>
-
-
