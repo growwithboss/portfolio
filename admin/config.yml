@@ -1,0 +1,26 @@
+backend:
+  name: github
+  repo: yourusername/portfolio # REPLACE with YOUR GitHub username and repo name
+  branch: main # or master, depending on your main branch name
+  base_url: https://auth.netlify.com/ # Netlify handles the authentication handshake
+  auth_scope: repo
+
+publish_mode: editorial_workflow # Optional: enables drafts and approvals
+
+media_folder: "images/uploads" # Folder where images will be saved
+public_folder: "/images/uploads" # The path to access the images from the website
+
+collections:
+  - name: "blog"
+    label: "BOSS Blog Posts"
+    folder: "_posts" # New folder where your blog posts will be saved
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Layout (Do Not Change)", name: "layout", widget: "hidden", default: "post"}
+      - {label: "Post Title", name: "title", widget: "string", required: true}
+      - {label: "Post SLUG (URL ID)", name: "slug", widget: "string", required: true, hint: "Use lower-case words separated by hyphens (e.g., new-strategies)"}
+      - {label: "Publish Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: true}
+      - {label: "Author", name: "author", widget: "string", default: "The BOSS Team"}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown", required: true}
