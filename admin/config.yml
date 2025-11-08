@@ -1,24 +1,25 @@
 backend:
   name: github
-  repo: growwithboss/portfolio # 🚨 YOU MUST REPLACE 'yourusername' with your GitHub username
-  branch: main 
-  # 🚨 IMPORTANT: You must host this on a service like Netlify or Vercel 
-  # to get secure, free authentication with GitHub. 
-  # GitHub Pages requires a separate, complex setup for authentication.
-  # For immediate testing, we will proceed assuming a Netlify setup.
+  repo: growwithboss/portfolio
+  branch: main
+  base_url: https://auth.netlify.com
+  auth_scope: repo
+  auth_provider: github
 
-media_folder: "images/blog" # Where media uploads go
+publish_mode: editorial_workflow
+
+media_folder: "images/blog" 
 public_folder: "/images/blog"
 
 collections:
   - name: "blog"
     label: "BOSS Blog Posts"
-    folder: "_posts" # Files will be saved here
+    folder: "_posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Post Title", name: "title", widget: "string", required: true}
-      - {label: "Post SLUG (URL ID)", name: "slug", widget: "string", required: true, hint: "Use hyphens, no spaces/caps."}
-      - {label: "Publish Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm", format: "YYYY-MM-DD HH:mm:ss Z", required: true}
+      - {label: "Post SLUG (URL ID)", name: "slug", widget: "string", required: true, hint: "Use lower-case words separated by hyphens (e.g., new-strategies)."}
+      - {label: "Publish Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:ssZ", required: true}
       - {label: "Author", name: "author", widget: "string", default: "The BOSS Team"}
       - {label: "Body", name: "body", widget: "markdown", required: true}
