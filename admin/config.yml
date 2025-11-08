@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: yourusername/portfolio # 🚨 YOU MUST REPLACE 'yourusername' with your GitHub username
+  repo: growwithboss/portfolio # 🚨 YOU MUST REPLACE 'yourusername' with your GitHub username
   branch: main 
   # 🚨 IMPORTANT: You must host this on a service like Netlify or Vercel 
   # to get secure, free authentication with GitHub. 
