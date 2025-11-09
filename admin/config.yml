@@ -1,26 +1,18 @@
-backend:
+  backend:
   name: github
-  repo: growwithboss/portfolio # Your repository
-  branch: main # Your main branch
-  base_url: https://api.github.com
-  # Use Netlify Identity is false since we are using pure GitHub Auth
-  auth_probe_url: 'https://growwithboss.netlify.app/admin/' 
+  repo: growwithboss/portfolio   # ← change this to match your repo
+  branch: main                        # or master, depending on your default branch
 
-publish_mode: editorial_workflow
-
-media_folder: "images/uploads" # Folder where uploaded images go
+media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
   - name: "blog"
-    label: "BOSS Blog Posts"
-    folder: "_posts"
+    label: "Blog"
+    folder: "blog"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
-      - {label: "Post Title", name: "title", widget: "string", required: true}
-      - {label: "Post SLUG (URL ID)", name: "slug", widget: "string", required: true, hint: "Use lower-case words separated by hyphens."}
-      - {label: "Publish Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:ssZ", required: true}
-      - {label: "Author", name: "author", widget: "string", default: "The BOSS Team"}
-      - {label: "Featured Image", name: "image", widget: "image", required: false} # Image upload field
-      - {label: "Body", name: "body", widget: "markdown", required: true} # Rich Markdown Editor
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
