@@ -2,8 +2,6 @@ backend:
   name: github
   repo: growwithboss/portfolio
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
 
 media_folder: "images/uploads"
 public_folder: "/portfolio/images/uploads"
