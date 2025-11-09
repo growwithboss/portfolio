@@ -1,9 +1,7 @@
 backend:
   name: github
-  repo: growwithboss/portfolio     # your repo name
-  branch: main                     # or master, depending on your repo
-  base_url: https://growwithboss.github.io/portfolio
-  auth_endpoint: /admin/
+  repo: growwithboss/portfolio
+  branch: main
 
 media_folder: "images/uploads"
 public_folder: "/portfolio/images/uploads"
