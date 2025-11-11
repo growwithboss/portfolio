@@ -1,297 +1,1566 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
+    
+   <link rel="manifest" href="/portfolio/manifest.json">
 
-  <!-- PWA / Analytics / Fonts -->
-  <link rel="manifest" href="/portfolio/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+<script>
+// ✅ Blog API URL
+const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmogvzsGclRMymiPegD-7gtZFWSQxTWkg3JeE5lEIAAFp4G19HmdswQ/exec';
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5BE2685PP"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date()); gtag('config', 'G-J5BE2685PP');
-  </script>
+// ✅ Load Blog Listing Function
+async function loadBlogListing() {
+    const container = document.getElementById('blog-posts-container');
+    if (!container) return;
 
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "u0qgvssf63");
-  </script>
+    container.innerHTML = '<p>Loading the latest insights...</p>';
 
-  <style>
-    /* ====== BASE / THEME ====== */
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --bg-primary:#000; --bg-secondary:#0a0a0a;
-      --text-primary:#fff; --text-secondary:#a0a0a0;
-      --accent:#fff; --highlight:#fff; --blue:#0078ff;
-    }
-    [data-theme="light"]{
-      --bg-primary:#fff; --bg-secondary:#f5f5f5;
-      --text-primary:#000; --text-secondary:#505050;
-      --accent:#000; --highlight:#000;
-    }
-    html,body{height:100%}
-    body{
-      font-family:'Poppins',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif;
-      background:var(--bg-primary); color:var(--text-primary);
-      overflow-x:hidden; line-height:1.6; cursor:none;
-      transition:.5s background,.5s color;
-    }
-    a{color:var(--blue); text-decoration:none}
-    a:hover{text-decoration:none}
+    try {
+        const response = await fetch(BLOG_API_URL);
+        const posts = await response.json();
 
-    /* ====== NAV ====== */
-    nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:2rem 5%;background:var(--bg-primary)}
-    .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-    .nav-logo{font-size:1.5rem;font-weight:900;letter-spacing:.2em}
-    .nav-menu{display:flex;gap:3rem;list-style:none;align-items:center}
-    .nav-menu a{color:var(--text-primary);font-size:.9rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;position:relative;padding:.5rem 0}
-    .nav-menu a::before{content:'';position:absolute;bottom:0;left:50%;width:0;height:1px;background:var(--text-primary);transform:translateX(-50%);transition:width .3s}
-    .nav-menu a:hover::before{width:100%}
-    .theme-btn{background:transparent;border:1px solid var(--text-primary);color:var(--text-primary);padding:.5rem 1.5rem;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
-    .theme-btn:hover{background:var(--text-primary);color:var(--bg-primary)}
-
-    .menu-toggle{display:none;flex-direction:column;gap:6px;width:30px;height:20px}
-    .menu-toggle span{width:100%;height:2px;background:var(--text-primary)}
-
-    /* ====== HERO ====== */
-    .hero{height:100vh;display:flex;align-items:center;justify-content:center;position:relative}
-    .boss-text{font-size:clamp(5rem,15vw,12rem);font-weight:900;letter-spacing:.1em}
-
-    /* ====== SECTIONS ====== */
-    section{min-height:100vh;padding:8rem 5%;display:flex;flex-direction:column;justify-content:center}
-    .section-title{font-size:clamp(3rem,6vw,5rem);font-weight:900;letter-spacing:.05em;margin-bottom:4rem}
-
-    /* ====== GRIDS ====== */
-    .services-grid,.projects-grid,.founders-grid{
-      display:grid;gap:2rem;max-width:1200px;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    }
-    .project-card{
-      border:1px solid rgba(255,255,255,.1);
-      padding:2rem;border-radius:16px;color:inherit;position:relative;overflow:hidden
-    }
-    [data-theme="light"] .project-card{border-color:rgba(0,0,0,.1)}
-
-    /* ====== BLOG CARDS (Portfolio style) ====== */
-    #blog .projects-grid{grid-template-columns:repeat(auto-fit,minmax(350px,1fr))}
-    .blog-card{
-      background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);
-      border-radius:16px;padding:1.5rem;transition:transform .25s, box-shadow .25s;
-    }
-    .blog-card:hover{transform:translateY(-6px);box-shadow:0 12px 24px rgba(0,0,0,.25)}
-    .blog-title{font-size:1.3rem;font-weight:700;margin:.5rem 0 0}
-    .blog-date{color:var(--text-secondary);font-size:.9rem;margin:.25rem 0 1rem}
-    .btn{display:inline-block;background:#0078ff;color:#fff;padding:10px 18px;border-radius:10px;font-weight:500}
-    .btn:hover{background:#005ec2}
-
-    /* ====== FOOTER ====== */
-    footer{padding:4rem 5% 2rem;border-top:1px solid rgba(255,255,255,.1)}
-    [data-theme="light"] footer{border-top-color:rgba(0,0,0,.1)}
-    .footer-content{max-width:1200px;margin:0 auto 3rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem}
-    .footer-section h3{font-size:.9rem;font-weight:700;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}
-    .footer-section a{color:var(--text-secondary);display:block;margin:.5rem 0}
-    .footer-section a:hover{color:var(--text-primary)}
-    .footer-bottom{text-align:center;color:var(--text-secondary);font-size:.85rem;border-top:1px solid rgba(255,255,255,.1);padding-top:2rem}
-    [data-theme="light"] .footer-bottom{border-top-color:rgba(0,0,0,.1)}
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 768px){
-      .menu-toggle{display:flex}
-      .nav-menu{display:none}
-      .footer-content{grid-template-columns:1fr}
-      section{padding:5rem 5%}
-    }
-
-    /* Cursor (kept simple) */
-    .cursor,.cursor-follower{display:none}
-  </style>
-</head>
-<body>
-  <nav>
-    <div class="nav-container">
-      <div class="nav-logo">BOSS</div>
-      <ul class="nav-menu">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#founders">Founders</a></li>
-        <li><a href="#blog">Blog</a></li>
-        <li><button class="theme-btn" onclick="toggleTheme()">Inverse</button></li>
-      </ul>
-      <div class="menu-toggle" onclick="toggleSidebar()">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-  </nav>
-
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <h1 class="boss-text"><span>B</span><span>O</span><span>S</span><span>S</span></h1>
-      <p class="tagline">growwithboss</p>
-    </div>
-  </section>
-
-  <section id="services">
-    <h2 class="section-title">Services</h2>
-    <div class="services-grid">
-      <div class="project-card"><h3>Business Strategy</h3><p>Scale with data-driven insights.</p></div>
-      <div class="project-card"><h3>Brand Onboarding</h3><p>Launch with clarity & impact.</p></div>
-      <div class="project-card"><h3>Excel Automation</h3><p>Automate workflows & reports.</p></div>
-      <div class="project-card"><h3>Digital Marketing</h3><p>Acquire and retain customers.</p></div>
-      <div class="project-card"><h3>Ads Management</h3><p>Optimize ROAS across channels.</p></div>
-      <div class="project-card"><h3>Web Building</h3><p>Modern, responsive websites.</p></div>
-    </div>
-  </section>
-
-  <section id="projects">
-    <h2 class="section-title">Projects</h2>
-    <div class="projects-grid">
-      <a class="project-card" href="#"><h3>Corporate Strategy</h3><p>Enterprise transformation</p></a>
-      <a class="project-card" href="#"><h3>E-commerce Launch</h3><p>Digital storefront</p></a>
-      <a class="project-card" href="#"><h3>Social Campaign</h3><p>Multi-platform engagement</p></a>
-    </div>
-  </section>
-
-  <!-- ====== BLOG: pulls from growwithboss/blog/_posts and links to live blog ====== -->
-  <section id="blog">
-    <h2 class="section-title">Blog</h2>
-    <div class="projects-grid" id="blog-posts-container">
-      <p>Loading latest articles…</p>
-    </div>
-    <div style="text-align:center;margin-top:1.5rem">
-      <a class="btn" href="https://growwithboss.github.io/blog/" target="_blank" rel="noopener">Open Blog</a>
-    </div>
-  </section>
-
-  <section id="founders">
-    <h2 class="section-title">Founders</h2>
-    <div class="founders-grid">
-      <div class="project-card"><h3>Founder Name</h3><p>Co-Founder & CEO</p></div>
-      <div class="project-card"><h3>Founder Name</h3><p>Co-Founder & CTO</p></div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2 class="section-title">Contact</h2>
-    <div class="services-grid" style="max-width:800px">
-      <div class="project-card">
-        <form onsubmit="return false;">
-          <input style="width:100%;padding:1rem;margin:.5rem 0;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--text-primary)" placeholder="Name" required/>
-          <input type="email" style="width:100%;padding:1rem;margin:.5rem 0;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--text-primary)" placeholder="Email" required/>
-          <textarea rows="5" style="width:100%;padding:1rem;margin:.5rem 0;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--text-primary)" placeholder="Message" required></textarea>
-          <button class="btn" style="border:0">Send</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>BOSS</h3>
-        <p style="color:var(--text-secondary);margin-top:1rem">Bingo Online Sales & Services<br/>growwithboss</p>
-      </div>
-      <div class="footer-section">
-        <h3>Quick Links</h3>
-        <a href="#services">Services</a>
-        <a href="#projects">Projects</a>
-        <a href="#founders">Founders</a>
-        <a href="#blog">Blog</a>
-      </div>
-      <div class="footer-section">
-        <h3>Legal</h3>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-      </div>
-      <div class="footer-section">
-        <h3>Contact</h3>
-        <a href="mailto:growwithboss@gmail.com">Email</a>
-        <a href="tel:+916060119007">Phone</a>
-      </div>
-    </div>
-    <div class="footer-bottom">© 2025 BOSS — Bingo Online Sales & Services</div>
-  </footer>
-
-  <!-- ====== Scripts ====== -->
-  <script>
-    // Theme toggle
-    function toggleTheme(){
-      const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'dark';
-      html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
-      localStorage.setItem('theme', html.getAttribute('data-theme'));
-    }
-    // Init theme & load blog
-    window.addEventListener('DOMContentLoaded', () => {
-      document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
-      loadBlogListing();
-    });
-
-    // ====== BLOG WIRING ======
-    const BLOG_REPO_OWNER = 'growwithboss';
-    const BLOG_REPO_NAME  = 'blog';
-    const BLOG_BASE_URL   = 'https://growwithboss.github.io/blog'; // your live blog base (has baseurl /blog)
-
-    // Turn filename into live blog permalink
-    function buildPostUrlFromFilename(filename){
-      // filename: YYYY-MM-DD-my-title.md -> /blog/YYYY/MM/DD/my-title.html
-      const noExt = filename.replace(/\.md$/,'');
-      const parts = noExt.split('-');
-      const [year, month, day, ...titleParts] = parts;
-      const slug = titleParts.join('-');
-      return `${BLOG_BASE_URL}/${year}/${month}/${day}/${slug}.html`;
-    }
-
-    async function loadBlogListing(){
-      const container = document.getElementById('blog-posts-container');
-      if (!container) return;
-
-      const apiEndpoint = `https://api.github.com/repos/${BLOG_REPO_OWNER}/${BLOG_REPO_NAME}/contents/_posts`;
-
-      try{
-        const res = await fetch(apiEndpoint);
-        if(!res.ok) throw new Error('GitHub API error: '+res.status);
-        const files = await res.json();
-
-        const posts = files
-          .filter(f => f.name.endsWith('.md'))
-          .sort((a,b) => b.name.localeCompare(a.name)); // newest first by filename
-
-        if(posts.length === 0){
-          container.innerHTML = '<p>No posts yet. Come back soon!</p>';
-          return;
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<p>No blog posts published yet.</p>';
+            return;
         }
 
-        container.innerHTML = posts.map(f => {
-          const url = buildPostUrlFromFilename(f.name);
-          const noExt = f.name.replace(/\.md$/,'');
-          const [y,m,d,...titleParts] = noExt.split('-');
-          const title = titleParts.join(' ').replace(/-/g,' ').replace(/\s+/g,' ').trim();
-          const date  = new Date(+y, +m-1, +d).toLocaleDateString();
-
-          return `
-            <a class="blog-card" href="${url}" target="_blank" rel="noopener">
-              <div class="blog-date">${date}</div>
-              <div class="blog-title">${title.toUpperCase()}</div>
-              <div style="margin-top:12px">
-                <span class="btn">Read More</span>
-              </div>
+        container.innerHTML = posts.map(post => `
+            <a href="post.html?slug=${post.SLUG}" class="project-card" data-scroll>
+                <h3>${post.TITLE}</h3>
+                <p>By ${post.AUTHOR} | ${post.DATE}</p>
             </a>
-          `;
-        }).join('');
-      }catch(err){
-        console.error(err);
-        container.innerHTML = '<p style="color:#f66">Failed to load blog posts. Try again later.</p>';
-      }
+        `).join('');
+
+        document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = `<p style="color:red;">Failed to load blog posts.</p>`;
     }
-  </script>
+}
+</script>
+    
+    // Check if the blog container exists on this page before trying to load
+    if (!container) return; 
+
+    container.innerHTML = '<p>Loading the latest insights...</p>'; // Show loading message
+
+    try {
+        const response = await fetch(BLOG_API_URL);
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const posts = await response.json(); 
+
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<p>No blog posts published yet. Check back soon!</p>';
+            return;
+        }
+
+        // Generate dynamic HTML cards for the posts
+        container.innerHTML = posts.map(post => `
+            <a href="post.html?slug=${post.SLUG}" class="project-card" data-scroll>
+                <h3>${post.TITLE}</h3>
+                <p>By ${post.AUTHOR} | ${post.DATE}</p>
+            </a>
+        `).join('');
+
+        // Re-run scroll observer after dynamic content loads
+        document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
+
+
+    } catch (error) {
+        console.error('Failed to fetch blog posts:', error);
+        container.innerHTML = `<p style="color: red;">Error loading blog posts: Check your Apps Script deployment and Sheet headers.</p>`;
+    }
+}
+        
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5BE2685PP"></script>
+    
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-J5BE2685PP');
+    </script>
+    
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "u0qgvssf63");
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #ffffff;
+            --highlight: #ffffff;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #000000;
+            --text-secondary: #505050;
+            --accent: #000000;
+            --highlight: #000000;
+        }
+
+        /* Custom Cursor */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: none;
+            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.15s ease, border-color 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5), background 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        a:hover ~ .cursor,
+        button:hover ~ .cursor {
+            width: 40px;
+            height: 40px;
+            border-width: 1px;
+        }
+
+        /* Navigation - Hyper Advanced */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 2rem 5%;
+            background: var(--bg-primary);
+            transition: background 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+
+        .nav-logo::after {
+            content: 'BOSS';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--text-primary);
+            overflow: hidden;
+            width: 0;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-logo:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            transform: translateY(-2px);
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--text-primary);
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            cursor: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .theme-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: none;
+            position: relative;
+            width: 30px;
+            height: 20px;
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-primary);
+            z-index: 2000;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .sidebar ul li {
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .sidebar ul li a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
+        }
+
+        .sidebar.active ul li a {
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .sidebar ul li:nth-child(1) a { animation-delay: 0.1s; }
+        .sidebar ul li:nth-child(2) a { animation-delay: 0.2s; }
+        .sidebar ul li:nth-child(3) a { animation-delay: 0.3s; }
+        .sidebar ul li:nth-child(4) a { animation-delay: 0.4s; }
+        .sidebar ul li:nth-child(5) a { animation-delay: 0.5s; }
+        .sidebar ul li:nth-child(6) a { animation-delay: 0.6s; }
+        .sidebar ul li:nth-child(7) a { animation-delay: 0.7s; } /* New link */
+
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+
+        .sidebar ul li a:hover {
+            transform: translateX(20px);
+        }
+
+        /* Hero Section - Ultra Creative */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        /* BOSS Text - 3D Rotating */
+        .boss-text {
+            font-size: clamp(5rem, 15vw, 12rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+        }
+
+        .boss-text span {
+            display: inline-block;
+            animation: rotate3D 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            transform-style: preserve-3d;
+        }
+
+        .boss-text span:nth-child(1) { animation-delay: 0s; }
+        .boss-text span:nth-child(2) { animation-delay: 0.2s; }
+        .boss-text span:nth-child(3) { animation-delay: 0.4s; }
+        .boss-text span:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes rotate3D {
+            0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
+            25% { transform: rotateY(180deg) rotateX(0deg); }
+            50% { transform: rotateY(180deg) rotateX(180deg); }
+            75% { transform: rotateY(0deg) rotateX(180deg); }
+        }
+
+        /* Tagline - Glitch Effect */
+        .tagline {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            position: relative;
+            text-transform: lowercase;
+            animation: glitch 5s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            91% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            92% {
+                transform: translate(2px, -2px);
+                opacity: 0.8;
+            }
+            93% {
+                transform: translate(-2px, -2px);
+                opacity: 0.8;
+            }
+        }
+
+        /* Background Grid Animation */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--text-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--text-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.03;
+            animation: gridMove 20s linear infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .grid-bg {
+            opacity: 0.05;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--text-primary);
+            opacity: 0.3;
+            animation: float 15s infinite;
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="light"] .particle {
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            50% { 
+                opacity: 0.3;
+            }
+        }
+
+        /* Section Styling - Minimalistic */
+        section {
+            min-height: 100vh;
+            padding: 8rem 5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            margin-bottom: 4rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--text-primary);
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+        }
+
+        .service-card {
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="light"] .service-card {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--text-primary), transparent);
+            opacity: 0.05;
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--text-primary);
+        }
+
+        .service-number {
+            font-size: 4rem;
+            font-weight: 900;
+            opacity: 0.1;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+        }
+
+        .project-card {
+            aspect-ratio: 16/10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] .project-card {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--text-primary);
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .project-card:hover::after {
+            opacity: 0.05;
+        }
+
+        .project-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Founders */
+        .founders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            max-width: 1000px;
+        }
+
+        .founder-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] .founder-card {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .founder-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .founder-initial {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border: 2px solid var(--text-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+        }
+
+        .founder-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .founder-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Contact Form */
+        .contact-container {
+            max-width: 600px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        [data-theme="light"] .contact-form input,
+        [data-theme="light"] .contact-form textarea {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--text-primary);
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .contact-form button:hover {
+            transform: translateY(-3px);
+        }
+
+        .contact-info {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-info a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .contact-info a:hover {
+            transform: translateX(10px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] footer {
+            border-top-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .footer-section a:hover {
+            color: var(--text-primary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        [data-theme="light"] .footer-bottom {
+            border-top-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            text-decoration: none;
+            z-index: 999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: none;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            margin: 5% auto;
+            padding: 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: var(--text-primary);
+            float: right;
+            font-size: 2rem;
+            font-weight: 300;
+            cursor: none;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* New Full-Screen PWA Modal Styles */
+        #pwa-install-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9000; 
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            opacity: 0.95; 
+            backdrop-filter: blur(5px);
+            z-index: 9001;
+        }
+
+        .modal-content-pwa {
+            position: relative;
+            padding: 3rem;
+            max-width: 450px;
+            background: var(--bg-secondary); 
+            border: 1px solid var(--text-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 9002; 
+            text-align: center;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: fadeInScale 0.5s ease-out forwards;
+        }
+
+        .modal-content-pwa h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content-pwa p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions button {
+            cursor: none; /* Changed to use custom cursor class */
+            margin: 0 0.5rem;
+            padding: 0.75rem 1.5rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 0; /* Minimalist style */
+        }
+
+        .modal-actions .install-btn {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+        }
+
+        .modal-actions .decline-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        @keyframes fadeInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .sidebar ul li a {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+            
+            .modal-content-pwa {
+                max-width: 90%;
+                padding: 2rem;
+            }
+            .modal-content-pwa h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Scroll Reveal */
+        [data-scroll] {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-scroll].revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <div id="pwa-install-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content-pwa">
+            <h2>Experience BOSS App: Full Power, No Browser.</h2>
+            <p>Install the BOSS web app to your home screen for instant, full-screen access and offline caching.</p>
+            <div class="modal-actions">
+                <button id="pwa-modal-install-btn" class="theme-btn install-btn">⚡ Install Now</button>
+                <button id="pwa-modal-decline-btn" class="theme-btn decline-btn">No, Thanks</button>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">BOSS</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#founders">Founders</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><button class="theme-btn" onclick="toggleTheme()">Inverse</button></li>
+            </ul>
+            <div class="menu-toggle" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        <ul>
+            <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
+            <li><a href="#services" onclick="toggleSidebar()">Services</a></li>
+            <li><a href="#projects" onclick="toggleSidebar()">Projects</a></li>
+            <li><a href="#founders" onclick="toggleSidebar()">Founders</a></li>
+            <li><a href="#contact" onclick="toggleSidebar()">Contact</a></li>
+            <li><a href="#blog" onclick="toggleSidebar()">Blog</a></li>
+            <li><a href="#" id="pwa-install-sidebar-link" style="display: none; font-size: 1.5rem; color: var(--accent);" onclick="promptInstall(event)">Install App</a></li>
+        </ul>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="grid-bg"></div>
+        <div class="hero-content">
+            <h1 class="boss-text">
+                <span>B</span><span>O</span><span>S</span><span>S</span>
+            </h1>
+            <p class="tagline">growwithboss</p>
+        </div>
+    </section>
+
+    <section id="services">
+        <h2 class="section-title" data-scroll>Services</h2>
+        <div class="services-grid">
+            <div class="service-card" data-scroll>
+                <div class="service-number">01</div>
+                <h3>Business Strategy</h3>
+                <p>Expert business strategy making to help you scale and grow your business effectively with data-driven insights.</p>
+            </div>
+            <div class="service-card" data-scroll>
+                <div class="service-number">02</div>
+                <h3>Brand Onboarding</h3>
+                <p>Complete brand onboarding solutions to establish your digital presence with impact and authenticity.</p>
+            </div>
+            <div class="service-card" data-scroll>
+                <div class="service-number">03</div>
+                <h3>Excel Automation</h3>
+                <p>Advanced Excel automation to streamline your data processing and boost operational productivity.</p>
+            </div>
+            <div class="service-card" data-scroll>
+                <div class="service-number">04</div>
+                <h3>Digital Marketing</h3>
+                <p>Comprehensive digital media marketing strategies that deliver measurable results and ROI.</p>
+            </div>
+            <div class="service-card" data-scroll>
+                <div class="service-number">05</div>
+                <h3>Ads Management</h3>
+                <p>Professional ads management across all platforms optimized for maximum reach and conversions.</p>
+            </div>
+            <div class="service-card" data-scroll>
+                <div class="service-number">06</div>
+                <h3>Web Building</h3>
+                <p>Modern, responsive web building services tailored to your unique business needs and goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title" data-scroll>Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card" data-scroll>
+                <h3>Corporate Strategy</h3>
+                <p>Enterprise transformation</p>
+            </div>
+            <div class="project-card" data-scroll>
+                <h3>E-commerce Launch</h3>
+                <p>Digital storefront solutions</p>
+            </div>
+            <div class="project-card" data-scroll>
+                <h3>Social Campaign</h3>
+                <p>Multi-platform engagement</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="founders">
+        <h2 class="section-title" data-scroll>Founders</h2>
+        <div class="founders-grid">
+            <div class="founder-card" data-scroll>
+                <div class="founder-initial">F</div>
+                <h3>Founder Name</h3>
+                <p>Co-Founder & CEO</p>
+                <p>Digital Strategy Expert</p>
+            </div>
+            <div class="founder-card" data-scroll>
+                <div class="founder-initial">F</div>
+                <h3>Founder Name</h3>
+                <p>Co-Founder & CTO</p>
+                <p>Technology Specialist</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title" data-scroll>Contact</h2>
+        <div class="contact-container" data-scroll>
+            <form class="contact-form" onsubmit="return handleSubmit(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Subject" required>
+                <textarea rows="5" placeholder="Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+            <div class="contact-info">
+                <a href="mailto:growwithboss@gmail.com">→ growwithboss@gmail.com</a>
+                <a href="tel:+916060119007">→ +91 606011900</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog">
+        <section id="blog">
+        <h2 class="section-title" data-scroll>Insights & News</h2>
+        
+        <div class="projects-grid" id="blog-posts-container">
+            <p>Loading the latest insights...</p>
+        </div>
+        
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BOSS</h3>
+                <p style="color: var(--text-secondary); margin-top: 1rem; line-height: 1.8;">Bingo Online Sales & Services<br>growwithboss</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#founders">Founders</a>
+                <a href="#blog">Blog</a>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <a href="#" onclick="openModal()">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <a href="mailto:growwithboss@gmail.com">Email</a>
+                <a href="tel:+916060119007">Phone</a>
+                <a href="#">Location</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 BOSS — Bingo Online Sales & Services</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/916060119007" class="whatsapp-btn" target="_blank">
+        💬
+    </a>
+
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="margin-bottom: 2rem; font-size: 2rem;">Privacy Policy</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Last updated: October 31, 2025</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">Information We Collect</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">We collect information that you provide directly to us through our contact forms and communication channels.</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">How We Use Your Information</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">We use the information we collect to provide, maintain, and improve our services, and to communicate with you about our offerings.</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">Data Security</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">We implement appropriate security measures to protect your personal information against unauthorized access or disclosure.</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">Contact Us</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;">If you have questions about this Privacy Policy, please contact us at growwithboss@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+        // --- PWA Installation Variables ---
+        let deferredInstallPrompt = null;
+        const installModal = document.getElementById('pwa-install-modal');
+        const installModalBtn = document.getElementById('pwa-modal-install-btn');
+        const declineModalBtn = document.getElementById('pwa-modal-decline-btn');
+        const installSidebarLink = document.getElementById('pwa-install-sidebar-link');
+        
+        // --- PWA Installation Listener (Captures the Browser Prompt) ---
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // 1. Prevent the default browser prompt
+            e.preventDefault(); 
+            // 2. Store the event for later use
+            deferredInstallPrompt = e;
+            
+            // 3. Show our custom button/modal if not permanently declined
+            if (!localStorage.getItem('boss-pwa-declined')) {
+                
+                // Show the subtle sidebar link
+                if (installSidebarLink) installSidebarLink.style.display = 'inline-block';
+                
+                // Show the aggressive modal after a delay (1 second)
+                setTimeout(() => {
+                    installModal.style.display = 'flex';
+                    
+                    // Track the aggressive prompt being shown
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'pwa_modal_shown', {'event_category': 'engagement'});
+                    }
+                }, 1000); 
+            }
+        });
+
+        // --- Function to Manually Trigger the Install Prompt ---
+        function promptInstall(e) {
+            if (e) e.preventDefault();
+            installModal.style.display = 'none'; // Hide modal immediately
+            
+            if (deferredInstallPrompt) {
+                // User interacted, so we set the flag so the modal doesn't pop up again
+                localStorage.setItem('boss-pwa-declined', 'true'); 
+                
+                deferredInstallPrompt.prompt(); // Show the native install dialog
+
+                deferredInstallPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA prompt');
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'pwa_install_accepted', {'event_category': 'conversion'});
+                        }
+                    } else {
+                        console.log('User dismissed the PWA prompt');
+                    }
+                    deferredInstallPrompt = null;
+                });
+            }
+             // Hide the sidebar link after attempt
+            if (installSidebarLink) installSidebarLink.style.display = 'none';
+        }
+        
+        // --- Function to Handle Decline Button Click (Crucial for UX) ---
+        declineModalBtn.addEventListener('click', () => {
+            // Hide the modal instantly
+            installModal.style.display = 'none';
+            
+            // Set a flag in the user's browser to never show the modal again
+            localStorage.setItem('boss-pwa-declined', 'true');
+            console.log('PWA Modal declined and hidden permanently.');
+
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'pwa_modal_declined', {'event_category': 'engagement'});
+            }
+            // Hide the sidebar link permanently after decline
+            if (installSidebarLink) installSidebarLink.style.display = 'none';
+        });
+
+        // Attach the function to the modal button and sidebar link
+        installModalBtn.addEventListener('click', promptInstall);
+        if (installSidebarLink) installSidebarLink.addEventListener('click', promptInstall);
+        
+        // --- Service Worker Registration (must include /portfolio/ path) ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/portfolio/sw.js') 
+                    .then(registration => {
+                        console.log('SW registered:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+        
+        
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Particle Generation
+        function createParticles() {
+            const hero = document.querySelector('.hero');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                hero.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Smooth Scroll with Analytics Tracking
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const sectionName = this.getAttribute('href').replace('#', '');
+                    
+                    // Track section view in Google Analytics
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'section_view', {
+                            'section_name': sectionName,
+                            'event_category': 'navigation',
+                            'event_label': sectionName
+                        });
+                    }
+                    
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            sidebar.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Theme Toggle with Analytics
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Track theme change in Google Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'theme_change', {
+                    'event_category': 'engagement',
+                    'event_label': newTheme,
+                    'value': newTheme === 'light' ? 1 : 0
+                });
+            }
+        }
+
+        // Load Saved Theme
+       window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    loadBlogListing();  // ✅ ADD THIS
+});
+
+        });
+
+        // Form Submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const submitButton = form.querySelector('button');
+            const originalText = submitButton.textContent;
+            
+            // Get form values
+            const formData = {
+                name: form.querySelector('input[placeholder="Name"]').value,
+                email: form.querySelector('input[placeholder="Email"]').value,
+                subject: form.querySelector('input[placeholder="Subject"]').value,
+                message: form.querySelector('textarea').value
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                alert('❌ Please fill in all fields');
+                return false;
+            }
+            
+            // Disable button and show loading
+            submitButton.textContent = 'SENDING...';
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.7';
+            submitButton.style.cursor = 'wait';
+            
+            try {
+                // Replace with your Google Apps Script URL
+                const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1-JWjkShPtJ20o5Re78FA7eEvY1TkoSBwc3Aa86S4lR5T0OgJIXNj_7PHYzhhGKa7dg/exec';
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Show success message
+                alert('✅ Thank you for contacting us!\n\nYour message has been sent successfully.\nWe will get back to you within 24-48 hours at ' + formData.email);
+                
+                // Track form submission in Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'form_submission', {
+                        'event_category': 'lead_generation',
+                        'event_label': 'contact_form',
+                        'value': 1
+                    });
+                }
+                
+                // Reset form
+                form.reset();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Oops! Something went wrong.\n\nPlease try again or contact us directly at:\ngrowwithboss@gmail.com\n+91 606011900');
+            } finally {
+                // Re-enable button
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+                submitButton.style.opacity = '1';
+                submitButton.style.cursor = 'none';
+            }
+            
+            return false;
+        }
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('privacyModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('privacyModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('privacyModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-scroll]').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect on Hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight);
+            }
+        });
+
+        // Add hover effect to cursor on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .service-card, .project-card, .founder-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.borderWidth = '1px';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.borderWidth = '2px';
+            });
+        });
+
+        // Track WhatsApp button clicks
+        document.querySelector('.whatsapp-btn').addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'whatsapp_click', {
+                    'event_category': 'engagement',
+                    'event_label': 'whatsapp_button',
+                    'value': 1
+                });
+            }
+        });
+
+        // Track service card clicks
+        document.querySelectorAll('.service-card').forEach((card, index) => {
+            card.addEventListener('click', function() {
+                const serviceName = this.querySelector('h3').textContent;
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'service_click', {
+                        'event_category': 'engagement',
+                        'event_label': serviceName,
+                        'value': index + 1
+                    });
+                }
+            });
+        });
+
+        // Track project card clicks
+        document.querySelectorAll('.project-card').forEach((card, index) => {
+            card.addEventListener('click', function() {
+                const projectName = this.querySelector('h3').textContent;
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'project_click', {
+                        'event_category': 'engagement',
+                        'event_label': projectName,
+                        'value': index + 1
+                    });
+                }
+            });
+        });
+
+        // Track time on page (send event every 30 seconds)
+        let timeOnPage = 0;
+        setInterval(() => {
+            timeOnPage += 30;
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'time_on_page', {
+                    'event_category': 'engagement',
+                    'event_label': 'active_time',
+                    'value': timeOnPage
+                });
+            }
+        }, 30000);
+
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+            if (scrollPercentage > maxScroll && scrollPercentage % 25 === 0) {
+                maxScroll = scrollPercentage;
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'engagement',
+                        'event_label': scrollPercentage + '%',
+                        'value': scrollPercentage
+                    });
+                }
+            }
+        });
+    </script>
+
 </body>
 </html>
+
