@@ -1,0 +1,39 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Article</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body style="padding: 5rem 5%; max-width: 900px; margin: auto; line-height: 1.7;">
+
+    <div id="post-container">
+        <p>Loading article...</p>
+    </div>
+
+    <script>
+        async function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get("slug");
+
+            const url = `https://raw.githubusercontent.com/growwithboss/portfolio/main/posts/${slug}.md`;
+
+            try {
+                const md = await fetch(url).then(r => r.text());
+                const html = marked.parse(md);
+                document.getElementById("post-container").innerHTML = html;
+            }
+            catch (e) {
+                document.getElementById("post-container").innerHTML =
+                    "<p style='color:red;'>Post not found.</p>";
+            }
+        }
+
+        loadPost();
+    </script>
+
+</body>
+</html>
