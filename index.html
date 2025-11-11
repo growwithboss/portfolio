@@ -5,78 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOSS - Grow with Boss | Bingo Online Sales & Services</title>
     
-   <link rel="manifest" href="/portfolio/manifest.json">
-
-<script>
-// ✅ Blog API URL
-const BLOG_API_URL = 'https://script.google.com/macros/s/AKfycbzw38rxzMofeRTxmogvzsGclRMymiPegD-7gtZFWSQxTWkg3JeE5lEIAAFp4G19HmdswQ/exec';
-
-// ✅ Load Blog Listing Function
-async function loadBlogListing() {
-    const container = document.getElementById('blog-posts-container');
-    if (!container) return;
-
-    container.innerHTML = '<p>Loading the latest insights...</p>';
-
-    try {
-        const response = await fetch(BLOG_API_URL);
-        const posts = await response.json();
-
-        if (!posts || posts.length === 0) {
-            container.innerHTML = '<p>No blog posts published yet.</p>';
-            return;
-        }
-
-        container.innerHTML = posts.map(post => `
-            <a href="post.html?slug=${post.SLUG}" class="project-card" data-scroll>
-                <h3>${post.TITLE}</h3>
-                <p>By ${post.AUTHOR} | ${post.DATE}</p>
-            </a>
-        `).join('');
-
-        document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
-
-    } catch (error) {
-        console.error(error);
-        container.innerHTML = `<p style="color:red;">Failed to load blog posts.</p>`;
-    }
-}
-</script>
+    <link rel="manifest" href="/portfolio/manifest.json">
     
-    // Check if the blog container exists on this page before trying to load
-    if (!container) return; 
-
-    container.innerHTML = '<p>Loading the latest insights...</p>'; // Show loading message
-
-    try {
-        const response = await fetch(BLOG_API_URL);
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const posts = await response.json(); 
-
-        if (!posts || posts.length === 0) {
-            container.innerHTML = '<p>No blog posts published yet. Check back soon!</p>';
-            return;
-        }
-
-        // Generate dynamic HTML cards for the posts
-        container.innerHTML = posts.map(post => `
-            <a href="post.html?slug=${post.SLUG}" class="project-card" data-scroll>
-                <h3>${post.TITLE}</h3>
-                <p>By ${post.AUTHOR} | ${post.DATE}</p>
-            </a>
-        `).join('');
-
-        // Re-run scroll observer after dynamic content loads
-        document.querySelectorAll('[data-scroll]').forEach(el => observer.observe(el));
-
-
-    } catch (error) {
-        console.error('Failed to fetch blog posts:', error);
-        container.innerHTML = `<p style="color: red;">Error loading blog posts: Check your Apps Script deployment and Sheet headers.</p>`;
-    }
-}
-        
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-J5BE2685PP"></script>
     
     <script>
@@ -106,7 +36,8 @@ async function loadBlogListing() {
             --bg-secondary: #0a0a0a;
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
-            --accent: #ffffff;
+            --accent: #00ff88;
+            --accent-glow: rgba(0, 255, 136, 0.3);
             --highlight: #ffffff;
         }
 
@@ -115,11 +46,12 @@ async function loadBlogListing() {
             --bg-secondary: #f5f5f5;
             --text-primary: #000000;
             --text-secondary: #505050;
-            --accent: #000000;
+            --accent: #00cc6a;
+            --accent-glow: rgba(0, 204, 106, 0.3);
             --highlight: #000000;
         }
 
-        /* Custom Cursor */
+        /* Enhanced Custom Cursor */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: var(--bg-primary);
@@ -133,43 +65,84 @@ async function loadBlogListing() {
         .cursor {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--text-primary);
+            border: 2px solid var(--accent);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: all 0.15s ease, border-color 0.3s ease;
+            transition: all 0.1s ease;
             transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
         }
 
         .cursor-follower {
             width: 8px;
             height: 8px;
-            background: var(--text-primary);
+            background: var(--accent);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
-            transition: all 0.3s cubic-bezier(0.75, -0.5, 0.25, 1.5), background 0.3s ease;
+            z-index: 9998;
+            transition: all 0.15s cubic-bezier(0.75, -0.5, 0.25, 1.5);
             transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        a:hover ~ .cursor,
-        button:hover ~ .cursor {
+        .cursor-trail {
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0;
+            animation: trailFade 0.5s ease-out;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            border-width: 1px;
+            background: var(--accent-glow);
+        }
+
+        .cursor.click {
             width: 40px;
             height: 40px;
-            border-width: 1px;
+            background: var(--accent);
         }
 
-        /* Navigation - Hyper Advanced */
+        /* Navigation - Enhanced */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
             padding: 2rem 5%;
-            background: var(--bg-primary);
-            transition: background 0.3s ease;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom-color: rgba(0, 204, 106, 0.1);
+        }
+
+        nav.scrolled {
+            padding: 1rem 5%;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        [data-theme="light"] nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .nav-container {
@@ -191,18 +164,19 @@ async function loadBlogListing() {
         }
 
         .nav-logo::after {
-            content: 'BOSS';
+            content: '';
             position: absolute;
+            bottom: -5px;
             left: 0;
-            top: 0;
-            color: var(--text-primary);
-            overflow: hidden;
-            width: 0;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
         .nav-logo:hover::after {
-            width: 100%;
+            transform: scaleX(1);
         }
 
         .nav-menu {
@@ -230,10 +204,11 @@ async function loadBlogListing() {
             bottom: 0;
             left: 50%;
             width: 0;
-            height: 1px;
-            background: var(--text-primary);
+            height: 2px;
+            background: var(--accent);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         .nav-menu a:hover::before {
@@ -241,13 +216,14 @@ async function loadBlogListing() {
         }
 
         .nav-menu a:hover {
+            color: var(--accent);
             transform: translateY(-2px);
         }
 
         .theme-btn {
             background: transparent;
-            border: 1px solid var(--text-primary);
-            color: var(--text-primary);
+            border: 1px solid var(--accent);
+            color: var(--accent);
             padding: 0.5rem 1.5rem;
             font-size: 0.8rem;
             letter-spacing: 0.1em;
@@ -255,12 +231,38 @@ async function loadBlogListing() {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .theme-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .theme-btn:hover {
-            background: var(--text-primary);
             color: var(--bg-primary);
+            border-color: var(--accent);
             transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent-glow);
+        }
+
+        .theme-btn span {
+            position: relative;
+            z-index: 1;
         }
 
         /* Mobile Menu Toggle */
@@ -277,9 +279,10 @@ async function loadBlogListing() {
         .menu-toggle span {
             width: 100%;
             height: 2px;
-            background: var(--text-primary);
+            background: var(--accent);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform-origin: center;
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         .menu-toggle.active span:nth-child(1) {
@@ -294,7 +297,7 @@ async function loadBlogListing() {
             transform: rotate(-45deg) translateY(-8px);
         }
 
-        /* Sidebar */
+        /* Enhanced Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -307,6 +310,18 @@ async function loadBlogListing() {
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.1;
         }
 
         .sidebar.active {
@@ -344,17 +359,19 @@ async function loadBlogListing() {
         .sidebar ul li:nth-child(4) a { animation-delay: 0.4s; }
         .sidebar ul li:nth-child(5) a { animation-delay: 0.5s; }
         .sidebar ul li:nth-child(6) a { animation-delay: 0.6s; }
-        .sidebar ul li:nth-child(7) a { animation-delay: 0.7s; } /* New link */
+        .sidebar ul li:nth-child(7) a { animation-delay: 0.7s; }
 
         @keyframes slideUp {
             to { transform: translateY(0); }
         }
 
         .sidebar ul li a:hover {
+            color: var(--accent);
             transform: translateX(20px);
+            text-shadow: 0 0 30px var(--accent-glow);
         }
 
-        /* Hero Section - Ultra Creative */
+        /* Hero Section - Ultra Enhanced */
         .hero {
             height: 100vh;
             display: flex;
@@ -369,7 +386,7 @@ async function loadBlogListing() {
             z-index: 2;
         }
 
-        /* BOSS Text - 3D Rotating */
+        /* BOSS Text - Enhanced 3D */
         .boss-text {
             font-size: clamp(5rem, 15vw, 12rem);
             font-weight: 900;
@@ -384,6 +401,14 @@ async function loadBlogListing() {
             display: inline-block;
             animation: rotate3D 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             transform-style: preserve-3d;
+            text-shadow: 0 0 50px var(--accent-glow);
+            transition: all 0.3s ease;
+        }
+
+        .boss-text span:hover {
+            color: var(--accent);
+            text-shadow: 0 0 80px var(--accent), 0 0 120px var(--accent-glow);
+            transform: scale(1.2) rotateY(180deg);
         }
 
         .boss-text span:nth-child(1) { animation-delay: 0s; }
@@ -398,38 +423,30 @@ async function loadBlogListing() {
             75% { transform: rotateY(0deg) rotateX(180deg); }
         }
 
-        /* Tagline - Glitch Effect */
+        /* Enhanced Tagline */
         .tagline {
             font-size: clamp(1.2rem, 3vw, 2rem);
             font-weight: 300;
             letter-spacing: 0.5em;
-            color: var(--text-secondary);
+            color: var(--accent);
             margin-top: 2rem;
             position: relative;
             text-transform: lowercase;
-            animation: glitch 5s infinite;
+            animation: glowPulse 3s infinite;
         }
 
-        @keyframes glitch {
-            0%, 90%, 100% {
-                transform: translate(0);
+        @keyframes glowPulse {
+            0%, 100% {
+                text-shadow: 0 0 20px var(--accent-glow);
                 opacity: 1;
             }
-            91% {
-                transform: translate(-2px, 2px);
-                opacity: 0.8;
-            }
-            92% {
-                transform: translate(2px, -2px);
-                opacity: 0.8;
-            }
-            93% {
-                transform: translate(-2px, -2px);
+            50% {
+                text-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent-glow);
                 opacity: 0.8;
             }
         }
 
-        /* Background Grid Animation */
+        /* Enhanced Grid Background */
         .grid-bg {
             position: absolute;
             top: 0;
@@ -437,16 +454,12 @@ async function loadBlogListing() {
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(var(--text-primary) 1px, transparent 1px),
-                linear-gradient(90deg, var(--text-primary) 1px, transparent 1px);
+                linear-gradient(var(--accent) 1px, transparent 1px),
+                linear-gradient(90deg, var(--accent) 1px, transparent 1px);
             background-size: 50px 50px;
-            opacity: 0.03;
+            opacity: 0.1;
             animation: gridMove 20s linear infinite;
             transition: opacity 0.3s ease;
-        }
-
-        [data-theme="light"] .grid-bg {
-            opacity: 0.05;
         }
 
         @keyframes gridMove {
@@ -454,19 +467,17 @@ async function loadBlogListing() {
             100% { transform: translate(50px, 50px); }
         }
 
-        /* Floating Particles */
+        /* Enhanced Floating Particles */
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--text-primary);
-            opacity: 0.3;
+            width: 3px;
+            height: 3px;
+            background: var(--accent);
+            opacity: 0.6;
             animation: float 15s infinite;
             transition: background 0.3s ease;
-        }
-
-        [data-theme="light"] .particle {
-            opacity: 0.4;
+            box-shadow: 0 0 10px var(--accent-glow);
+            border-radius: 50%;
         }
 
         @keyframes float {
@@ -475,17 +486,18 @@ async function loadBlogListing() {
                 opacity: 0;
             }
             50% { 
-                opacity: 0.3;
+                opacity: 0.6;
             }
         }
 
-        /* Section Styling - Minimalistic */
+        /* Section Styling - Enhanced */
         section {
             min-height: 100vh;
             padding: 8rem 5%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
         }
 
         .section-title {
@@ -495,6 +507,7 @@ async function loadBlogListing() {
             margin-bottom: 4rem;
             position: relative;
             display: inline-block;
+            color: var(--text-primary);
         }
 
         .section-title::after {
@@ -503,28 +516,37 @@ async function loadBlogListing() {
             bottom: -10px;
             left: 0;
             width: 50px;
-            height: 2px;
-            background: var(--text-primary);
+            height: 3px;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            animation: lineGrow 2s ease-in-out infinite;
+        }
+
+        @keyframes lineGrow {
+            0%, 100% { width: 50px; }
+            50% { width: 150px; }
         }
 
         /* Services Grid */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             max-width: 1200px;
         }
 
         .service-card {
-            padding: 3rem 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 1.5rem;
+            border: 1px solid rgba(0, 255, 136, 0.2);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            background: rgba(0, 255, 136, 0.02);
         }
 
         [data-theme="light"] .service-card {
-            border-color: rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 204, 106, 0.2);
+            background: rgba(0, 204, 106, 0.02);
         }
 
         .service-card::before {
@@ -534,8 +556,8 @@ async function loadBlogListing() {
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, var(--text-primary), transparent);
-            opacity: 0.05;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.1;
             transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -545,52 +567,58 @@ async function loadBlogListing() {
 
         .service-card:hover {
             transform: translateY(-10px);
-            border-color: var(--text-primary);
+            border-color: var(--accent);
+            box-shadow: 0 10px 50px var(--accent-glow);
         }
 
         .service-number {
-            font-size: 4rem;
+            font-size: 2.5rem;
             font-weight: 900;
             opacity: 0.1;
             line-height: 1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
         }
 
         .service-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             letter-spacing: 0.05em;
         }
 
         .service-card p {
             color: var(--text-secondary);
-            line-height: 1.8;
-            font-size: 0.95rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
         }
 
-        /* Projects Grid */
+        /* Enhanced Projects Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
             max-width: 1200px;
         }
 
         .project-card {
-            aspect-ratio: 16/10;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
+            aspect-ratio: 16/9;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             position: relative;
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 255, 136, 0.02);
+            text-decoration: none;
+            color: inherit;
         }
 
         [data-theme="light"] .project-card {
-            border-color: rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 204, 106, 0.2);
+            background: rgba(0, 204, 106, 0.02);
         }
 
         .project-card::after {
@@ -600,18 +628,24 @@ async function loadBlogListing() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--text-primary);
+            background: var(--accent);
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
         }
 
         .project-card:hover::after {
-            opacity: 0.05;
+            opacity: 0.1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 50px var(--accent-glow);
         }
 
         .project-card h3 {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             position: relative;
@@ -622,56 +656,68 @@ async function loadBlogListing() {
             color: var(--text-secondary);
             position: relative;
             z-index: 2;
+            font-size: 0.9rem;
         }
 
-        /* Founders */
+        /* Enhanced Founders */
         .founders-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
             max-width: 1000px;
         }
 
         .founder-card {
             text-align: center;
-            padding: 3rem 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 1.5rem;
+            border: 1px solid rgba(0, 255, 136, 0.2);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 255, 136, 0.02);
         }
 
         [data-theme="light"] .founder-card {
-            border-color: rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 204, 106, 0.2);
+            background: rgba(0, 204, 106, 0.02);
         }
 
         .founder-card:hover {
             transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 50px var(--accent-glow);
         }
 
         .founder-initial {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 2rem;
-            border: 2px solid var(--text-primary);
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            border: 2px solid var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-glow);
+            transition: all 0.3s ease;
+        }
+
+        .founder-card:hover .founder-initial {
+            transform: rotate(360deg);
+            box-shadow: 0 0 60px var(--accent);
         }
 
         .founder-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
         .founder-card p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* Contact Form */
+        /* Enhanced Contact Form */
         .contact-container {
             max-width: 600px;
         }
@@ -682,7 +728,7 @@ async function loadBlogListing() {
             padding: 1.2rem;
             margin-bottom: 1.5rem;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -691,19 +737,20 @@ async function loadBlogListing() {
 
         [data-theme="light"] .contact-form input,
         [data-theme="light"] .contact-form textarea {
-            border-color: rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 204, 106, 0.3);
         }
 
         .contact-form input:focus,
         .contact-form textarea:focus {
             outline: none;
-            border-color: var(--text-primary);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .contact-form button {
             width: 100%;
             padding: 1.2rem;
-            background: var(--text-primary);
+            background: var(--accent);
             color: var(--bg-primary);
             border: none;
             font-size: 1rem;
@@ -712,10 +759,31 @@ async function loadBlogListing() {
             text-transform: uppercase;
             cursor: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+
+        .contact-form button:hover::before {
+            width: 500px;
+            height: 500px;
         }
 
         .contact-form button:hover {
             transform: translateY(-3px);
+            box-shadow: 0 10px 40px var(--accent-glow);
         }
 
         .contact-info {
@@ -726,7 +794,7 @@ async function loadBlogListing() {
         }
 
         .contact-info a {
-            color: var(--text-primary);
+            color: var(--accent);
             text-decoration: none;
             font-size: 1.1rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -734,16 +802,17 @@ async function loadBlogListing() {
 
         .contact-info a:hover {
             transform: translateX(10px);
+            text-shadow: 0 0 20px var(--accent-glow);
         }
 
         /* Footer */
         footer {
             padding: 4rem 5% 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 255, 136, 0.2);
         }
 
         [data-theme="light"] footer {
-            border-top-color: rgba(0, 0, 0, 0.1);
+            border-top-color: rgba(0, 204, 106, 0.2);
         }
 
         .footer-content {
@@ -760,6 +829,7 @@ async function loadBlogListing() {
             letter-spacing: 0.1em;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
+            color: var(--accent);
         }
 
         .footer-section a {
@@ -772,30 +842,30 @@ async function loadBlogListing() {
         }
 
         .footer-section a:hover {
-            color: var(--text-primary);
+            color: var(--accent);
             transform: translateX(5px);
         }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 255, 136, 0.2);
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
 
         [data-theme="light"] .footer-bottom {
-            border-top-color: rgba(0, 0, 0, 0.1);
+            border-top-color: rgba(0, 204, 106, 0.2);
         }
 
-        /* WhatsApp Button */
+        /* Enhanced WhatsApp Button */
         .whatsapp-btn {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             width: 60px;
             height: 60px;
-            background: var(--text-primary);
+            background: var(--accent);
             color: var(--bg-primary);
             border-radius: 50%;
             display: flex;
@@ -806,10 +876,12 @@ async function loadBlogListing() {
             z-index: 999;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: none;
+            box-shadow: 0 5px 30px var(--accent-glow);
         }
 
         .whatsapp-btn:hover {
-            transform: scale(1.1) rotate(15deg);
+            transform: scale(1.2) rotate(15deg);
+            box-shadow: 0 10px 50px var(--accent);
         }
 
         /* Modal */
@@ -829,7 +901,7 @@ async function loadBlogListing() {
             background: var(--bg-primary);
             margin: 5% auto;
             padding: 4rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             width: 90%;
             max-width: 800px;
             max-height: 80vh;
@@ -837,7 +909,7 @@ async function loadBlogListing() {
         }
 
         .close {
-            color: var(--text-primary);
+            color: var(--accent);
             float: right;
             font-size: 2rem;
             font-weight: 300;
@@ -847,9 +919,10 @@ async function loadBlogListing() {
 
         .close:hover {
             transform: rotate(90deg);
+            text-shadow: 0 0 20px var(--accent-glow);
         }
         
-        /* New Full-Screen PWA Modal Styles */
+        /* PWA Modal Styles */
         #pwa-install-modal {
             position: fixed;
             top: 0;
@@ -879,8 +952,8 @@ async function loadBlogListing() {
             padding: 3rem;
             max-width: 450px;
             background: var(--bg-secondary); 
-            border: 1px solid var(--text-primary);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--accent);
+            box-shadow: 0 10px 50px var(--accent-glow);
             z-index: 9002; 
             text-align: center;
             transform: scale(0.9);
@@ -891,6 +964,7 @@ async function loadBlogListing() {
         .modal-content-pwa h2 {
             font-size: 1.8rem;
             margin-bottom: 1rem;
+            color: var(--accent);
         }
 
         .modal-content-pwa p {
@@ -899,24 +973,35 @@ async function loadBlogListing() {
         }
 
         .modal-actions button {
-            cursor: none; /* Changed to use custom cursor class */
+            cursor: none;
             margin: 0 0.5rem;
             padding: 0.75rem 1.5rem;
             text-transform: uppercase;
             font-weight: 700;
-            border-radius: 0; /* Minimalist style */
+            border-radius: 0;
+            transition: all 0.3s ease;
         }
 
         .modal-actions .install-btn {
-            background: var(--text-primary);
+            background: var(--accent);
             color: var(--bg-primary);
             border: none;
         }
 
+        .modal-actions .install-btn:hover {
+            box-shadow: 0 5px 30px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
         .modal-actions .decline-btn {
             background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--text-secondary);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .modal-actions .decline-btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
         }
 
         @keyframes fadeInScale {
@@ -925,6 +1010,7 @@ async function loadBlogListing() {
                 opacity: 1;
             }
         }
+
         /* Responsive */
         @media (max-width: 768px) {
             .menu-toggle {
@@ -955,6 +1041,40 @@ async function loadBlogListing() {
             .modal-content-pwa h2 {
                 font-size: 1.4rem;
             }
+
+            /* Center align all content on mobile */
+            .services-grid,
+            .projects-grid,
+            .founders-grid {
+                justify-items: center;
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+
+            .service-card,
+            .project-card,
+            .founder-card {
+                max-width: 400px;
+                width: 100%;
+            }
+
+            .section-title {
+                text-align: center;
+                width: 100%;
+            }
+
+            .section-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .contact-container {
+                max-width: 100%;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
         }
 
         /* Scroll Reveal */
@@ -967,6 +1087,16 @@ async function loadBlogListing() {
         [data-scroll].revealed {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
     </style>
 </head>
@@ -995,8 +1125,8 @@ async function loadBlogListing() {
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#founders">Founders</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><button class="theme-btn" onclick="toggleTheme()">Inverse</button></li>
+                <li><a href="https://growwithboss.github.io/blog/" target="_blank">Blog</a></li>
+                <li><button class="theme-btn" onclick="toggleTheme()"><span>Inverse</span></button></li>
             </ul>
             <div class="menu-toggle" onclick="toggleSidebar()">
                 <span></span>
@@ -1013,7 +1143,7 @@ async function loadBlogListing() {
             <li><a href="#projects" onclick="toggleSidebar()">Projects</a></li>
             <li><a href="#founders" onclick="toggleSidebar()">Founders</a></li>
             <li><a href="#contact" onclick="toggleSidebar()">Contact</a></li>
-            <li><a href="#blog" onclick="toggleSidebar()">Blog</a></li>
+            <li><a href="https://growwithboss.github.io/blog/" target="_blank" onclick="toggleSidebar()">Blog</a></li>
             <li><a href="#" id="pwa-install-sidebar-link" style="display: none; font-size: 1.5rem; color: var(--accent);" onclick="promptInstall(event)">Install App</a></li>
         </ul>
     </div>
@@ -1112,19 +1242,9 @@ async function loadBlogListing() {
             </form>
             <div class="contact-info">
                 <a href="mailto:growwithboss@gmail.com">→ growwithboss@gmail.com</a>
-                <a href="tel:+916060119007">→ +91 606011900</a>
+                <a href="tel:+916361435534">→ +91 6361435534</a>
             </div>
         </div>
-    </section>
-
-    <section id="blog">
-        <section id="blog">
-        <h2 class="section-title" data-scroll>Insights & News</h2>
-        
-        <div class="projects-grid" id="blog-posts-container">
-            <p>Loading the latest insights...</p>
-        </div>
-        
     </section>
 
     <footer>
@@ -1138,7 +1258,7 @@ async function loadBlogListing() {
                 <a href="#services">Services</a>
                 <a href="#projects">Projects</a>
                 <a href="#founders">Founders</a>
-                <a href="#blog">Blog</a>
+                <a href="https://growwithboss.github.io/blog/" target="_blank">Blog</a>
             </div>
             <div class="footer-section">
                 <h3>Legal</h3>
@@ -1149,7 +1269,7 @@ async function loadBlogListing() {
             <div class="footer-section">
                 <h3>Contact</h3>
                 <a href="mailto:growwithboss@gmail.com">Email</a>
-                <a href="tel:+916060119007">Phone</a>
+                <a href="tel:+916361435534">Phone</a>
                 <a href="#">Location</a>
             </div>
         </div>
@@ -1158,7 +1278,7 @@ async function loadBlogListing() {
         </div>
     </footer>
 
-    <a href="https://wa.me/916060119007" class="whatsapp-btn" target="_blank">
+    <a href="https://wa.me/916361435534" class="whatsapp-btn" target="_blank">
         💬
     </a>
 
@@ -1183,31 +1303,24 @@ async function loadBlogListing() {
     </div>
 
     <script>
-        // --- PWA Installation Variables ---
+        // PWA Installation Variables
         let deferredInstallPrompt = null;
         const installModal = document.getElementById('pwa-install-modal');
         const installModalBtn = document.getElementById('pwa-modal-install-btn');
         const declineModalBtn = document.getElementById('pwa-modal-decline-btn');
         const installSidebarLink = document.getElementById('pwa-install-sidebar-link');
         
-        // --- PWA Installation Listener (Captures the Browser Prompt) ---
+        // PWA Installation Listener
         window.addEventListener('beforeinstallprompt', (e) => {
-            // 1. Prevent the default browser prompt
             e.preventDefault(); 
-            // 2. Store the event for later use
             deferredInstallPrompt = e;
             
-            // 3. Show our custom button/modal if not permanently declined
             if (!localStorage.getItem('boss-pwa-declined')) {
-                
-                // Show the subtle sidebar link
                 if (installSidebarLink) installSidebarLink.style.display = 'inline-block';
                 
-                // Show the aggressive modal after a delay (1 second)
                 setTimeout(() => {
                     installModal.style.display = 'flex';
                     
-                    // Track the aggressive prompt being shown
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'pwa_modal_shown', {'event_category': 'engagement'});
                     }
@@ -1215,16 +1328,15 @@ async function loadBlogListing() {
             }
         });
 
-        // --- Function to Manually Trigger the Install Prompt ---
+        // Function to Manually Trigger the Install Prompt
         function promptInstall(e) {
             if (e) e.preventDefault();
-            installModal.style.display = 'none'; // Hide modal immediately
+            installModal.style.display = 'none';
             
             if (deferredInstallPrompt) {
-                // User interacted, so we set the flag so the modal doesn't pop up again
                 localStorage.setItem('boss-pwa-declined', 'true'); 
                 
-                deferredInstallPrompt.prompt(); // Show the native install dialog
+                deferredInstallPrompt.prompt();
 
                 deferredInstallPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -1238,31 +1350,25 @@ async function loadBlogListing() {
                     deferredInstallPrompt = null;
                 });
             }
-             // Hide the sidebar link after attempt
             if (installSidebarLink) installSidebarLink.style.display = 'none';
         }
         
-        // --- Function to Handle Decline Button Click (Crucial for UX) ---
+        // Handle Decline Button Click
         declineModalBtn.addEventListener('click', () => {
-            // Hide the modal instantly
             installModal.style.display = 'none';
-            
-            // Set a flag in the user's browser to never show the modal again
             localStorage.setItem('boss-pwa-declined', 'true');
             console.log('PWA Modal declined and hidden permanently.');
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'pwa_modal_declined', {'event_category': 'engagement'});
             }
-            // Hide the sidebar link permanently after decline
             if (installSidebarLink) installSidebarLink.style.display = 'none';
         });
 
-        // Attach the function to the modal button and sidebar link
         installModalBtn.addEventListener('click', promptInstall);
         if (installSidebarLink) installSidebarLink.addEventListener('click', promptInstall);
         
-        // --- Service Worker Registration (must include /portfolio/ path) ---
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/portfolio/sw.js') 
@@ -1275,25 +1381,55 @@ async function loadBlogListing() {
             });
         }
         
-        
-        // Custom Cursor
+        // Enhanced Custom Cursor with Trail Effect
         const cursor = document.querySelector('.cursor');
         const cursorFollower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+            mouseX = e.clientX;
+            mouseY = e.clientY;
             
-            setTimeout(() => {
-                cursorFollower.style.left = e.clientX + 'px';
-                cursorFollower.style.top = e.clientY + 'px';
-            }, 100);
+            // Create trail effect
+            if (Math.random() > 0.8) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+                
+                setTimeout(() => trail.remove(), 500);
+            }
+        });
+
+        // Smooth cursor animation - Faster response
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.5;
+            cursorY += (mouseY - cursorY) * 0.5;
+            followerX += (mouseX - followerX) * 0.3;
+            followerY += (mouseY - followerY) * 0.3;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorFollower.style.left = followerX + 'px';
+            cursorFollower.style.top = followerY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Click effect
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('click');
+            setTimeout(() => cursor.classList.remove('click'), 200);
         });
 
         // Particle Generation
         function createParticles() {
             const hero = document.querySelector('.hero');
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 50; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
@@ -1313,7 +1449,6 @@ async function loadBlogListing() {
                 if (target) {
                     const sectionName = this.getAttribute('href').replace('#', '');
                     
-                    // Track section view in Google Analytics
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'section_view', {
                             'section_name': sectionName,
@@ -1343,7 +1478,6 @@ async function loadBlogListing() {
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Track theme change in Google Analytics
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'theme_change', {
                     'event_category': 'engagement',
@@ -1354,13 +1488,9 @@ async function loadBlogListing() {
         }
 
         // Load Saved Theme
-       window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    loadBlogListing();  // ✅ ADD THIS
-});
-
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
         });
 
         // Form Submission
@@ -1371,7 +1501,6 @@ async function loadBlogListing() {
             const submitButton = form.querySelector('button');
             const originalText = submitButton.textContent;
             
-            // Get form values
             const formData = {
                 name: form.querySelector('input[placeholder="Name"]').value,
                 email: form.querySelector('input[placeholder="Email"]').value,
@@ -1379,20 +1508,16 @@ async function loadBlogListing() {
                 message: form.querySelector('textarea').value
             };
             
-            // Validate form
             if (!formData.name || !formData.email || !formData.subject || !formData.message) {
                 alert('❌ Please fill in all fields');
                 return false;
             }
             
-            // Disable button and show loading
             submitButton.textContent = 'SENDING...';
             submitButton.disabled = true;
             submitButton.style.opacity = '0.7';
-            submitButton.style.cursor = 'wait';
             
             try {
-                // Replace with your Google Apps Script URL
                 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1-JWjkShPtJ20o5Re78FA7eEvY1TkoSBwc3Aa86S4lR5T0OgJIXNj_7PHYzhhGKa7dg/exec';
                 
                 const response = await fetch(SCRIPT_URL, {
@@ -1404,10 +1529,8 @@ async function loadBlogListing() {
                     body: JSON.stringify(formData)
                 });
                 
-                // Show success message
                 alert('✅ Thank you for contacting us!\n\nYour message has been sent successfully.\nWe will get back to you within 24-48 hours at ' + formData.email);
                 
-                // Track form submission in Google Analytics
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'form_submission', {
                         'event_category': 'lead_generation',
@@ -1416,18 +1539,15 @@ async function loadBlogListing() {
                     });
                 }
                 
-                // Reset form
                 form.reset();
                 
             } catch (error) {
                 console.error('Error:', error);
-                alert('❌ Oops! Something went wrong.\n\nPlease try again or contact us directly at:\ngrowwithboss@gmail.com\n+91 606011900');
+                alert('❌ Oops! Something went wrong.\n\nPlease try again or contact us directly at:\ngrowwithboss@gmail.com\n+91 6361435534');
             } finally {
-                // Re-enable button
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
                 submitButton.style.opacity = '1';
-                submitButton.style.cursor = 'none';
             }
             
             return false;
@@ -1471,9 +1591,18 @@ async function loadBlogListing() {
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const hero = document.querySelector('.hero-content');
+            const nav = document.querySelector('nav');
+            
             if (hero && scrolled < window.innerHeight) {
                 hero.style.transform = `translateY(${scrolled * 0.5}px)`;
                 hero.style.opacity = 1 - (scrolled / window.innerHeight);
+            }
+            
+            // Add scroll class to nav
+            if (scrolled > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
             }
         });
 
@@ -1481,14 +1610,10 @@ async function loadBlogListing() {
         const interactiveElements = document.querySelectorAll('a, button, .service-card, .project-card, .founder-card');
         interactiveElements.forEach(el => {
             el.addEventListener('mouseenter', () => {
-                cursor.style.width = '40px';
-                cursor.style.height = '40px';
-                cursor.style.borderWidth = '1px';
+                cursor.classList.add('hover');
             });
             el.addEventListener('mouseleave', () => {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
-                cursor.style.borderWidth = '2px';
+                cursor.classList.remove('hover');
             });
         });
 
@@ -1531,7 +1656,7 @@ async function loadBlogListing() {
             });
         });
 
-        // Track time on page (send event every 30 seconds)
+        // Track time on page
         let timeOnPage = 0;
         setInterval(() => {
             timeOnPage += 30;
@@ -1563,4 +1688,3 @@ async function loadBlogListing() {
 
 </body>
 </html>
-
